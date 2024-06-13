@@ -1,5 +1,4 @@
-import { z, ZodSchema } from 'zod';
-import IUser from './user.interface';
+import { z } from 'zod';
 
 // Define the User validation schema
 const userSignUpValidationSchema = z.object({
