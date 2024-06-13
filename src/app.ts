@@ -14,8 +14,13 @@ app.use(cookieParser());
 // Enable CORS for any origin
 app.use(cors());
 
+// Root testing route
+app.get('/', (req, res) => {
+  res.send('Root Testing Route: Server is running!');
+});
+
 // Application routes
-app.use('/api/v1', router);
+app.use('/api', router);
 
 // Global error handler
 app.use(globalErrorHandler);
