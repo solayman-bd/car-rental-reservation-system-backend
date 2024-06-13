@@ -115,9 +115,51 @@ const updateSingleCar = async (
     throw new Error(err);
   }
 };
+
+const deleteSingleCar = async (
+  decodedToken: IDecodedToken,
+  carId: mongoose.Types.ObjectId,
+) => {
+  try {
+    const { role, userId } = decodedToken;
+
+    if (role !== 'admin') {
+      throw new AppError(
+        httpStatus.UNAUTHORIZED,
+        'Only Admins can update cars',
+      );
+    }
+
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+    }
+
+    const car = await carModel.findById(carId);
+    if (!car || car?.isDeleted == true) {
+      throw new AppError(
+        httpStatus.NOT_FOUND,
+        'Car is not found or the car is deleted..',
+      );
+    }
+
+    // Update the car with the new payload
+    const sofDeletedCar = await carModel.findByIdAndUpdate(
+      carId,
+      { $set: { isDeleted: true } },
+      { new: true },
+    );
+
+    return sofDeletedCar;
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
 export const CarService = {
   createACar,
   getAllCars,
   getSingleCar,
   updateSingleCar,
+  deleteSingleCar,
 };

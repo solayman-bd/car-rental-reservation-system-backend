@@ -18,5 +18,6 @@ router.put(
   validateRequest(carValidations.carUpdateValidationSchema),
   carControllers.updateSingleCar,
 );
+router.delete('/:id', carControllers.deleteSingleCar);
 
 export const carRoutes = router;
