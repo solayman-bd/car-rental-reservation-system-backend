@@ -1,14 +1,14 @@
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
-import { CarService } from './car.service';
-import { authorize, validateObjectId, verifyToken } from './car.utils';
-import mongoose from 'mongoose';
+import { carService } from './car.service';
+import { decodeToken } from '../../utils/decodeToken';
+import { validateObjectId } from '../../utils/validateObjectId';
+import { Response, Request } from 'express';
 
 // Controller functions
 const createACar = catchAsync(async (req, res) => {
-  const decoded = authorize(req);
-  const result = await CarService.createACar(req.body, decoded);
+  const result = await carService.createACar(req.body, req.user.userId);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
@@ -17,8 +17,7 @@ const createACar = catchAsync(async (req, res) => {
   });
 });
 const getAllCars = catchAsync(async (req, res) => {
-  const decoded = authorize(req);
-  const result = await CarService.getAllCars(decoded);
+  const result = await carService.getAllCars(req.user.userId, req.user.role);
   const message =
     result.length === 0 ? 'No car found!' : 'Cars retrieved successfully!';
   sendResponse(res, {
@@ -31,10 +30,13 @@ const getAllCars = catchAsync(async (req, res) => {
 
 const getSingleCar = catchAsync(async (req, res) => {
   const { id } = req.params;
-  validateObjectId(id);
-  const objectId = new mongoose.Types.ObjectId(id); // Convert id to ObjectId
-  const decoded = authorize(req);
-  const result = await CarService.getSingleCar(decoded, objectId);
+  const objectId = validateObjectId(id);
+
+  const result = await carService.getSingleCar(
+    req.user.userId,
+    req.user.role,
+    objectId,
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -45,10 +47,14 @@ const getSingleCar = catchAsync(async (req, res) => {
 
 const updateSingleCar = catchAsync(async (req, res) => {
   const { id } = req.params;
-  validateObjectId(id);
-  const objectId = new mongoose.Types.ObjectId(id); // Convert id to ObjectId
-  const decoded = authorize(req);
-  const result = await CarService.updateSingleCar(decoded, objectId, req.body);
+  const objectId = validateObjectId(id);
+
+  const result = await carService.updateSingleCar(
+    req.user.userId,
+    req.user.role,
+    objectId,
+    req.body,
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -59,14 +65,30 @@ const updateSingleCar = catchAsync(async (req, res) => {
 
 const deleteSingleCar = catchAsync(async (req, res) => {
   const { id } = req.params;
-  validateObjectId(id);
-  const objectId = new mongoose.Types.ObjectId(id); // Convert id to ObjectId
-  const decoded = authorize(req);
-  const result = await CarService.deleteSingleCar(decoded, objectId);
+  const objectId = validateObjectId(id);
+
+  const result = await carService.deleteSingleCar(
+    req.user.userId,
+    req.user.role,
+    objectId,
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Car deleted successfully',
+    data: { result },
+  });
+});
+const returnTheCar = catchAsync(async (req, res) => {
+  const result = await carService.returnTheCar(
+    req.body,
+    req.user.userId,
+    req.user.role,
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Car returned successfully...!',
     data: { result },
   });
 });
@@ -77,4 +99,5 @@ export const carControllers = {
   getSingleCar,
   updateSingleCar,
   deleteSingleCar,
+  returnTheCar,
 };

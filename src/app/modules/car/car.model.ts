@@ -12,11 +12,11 @@ const carSchema = new Schema<ICar>({
   status: {
     type: String,
     default: 'available',
-    enum: ['available', 'not available'],
+    enum: ['available', 'unavailable'],
   },
 });
 
 // Create and export the Car model
-const carModel = mongoose.model<ICar>('Car', carSchema);
+const CarModel = mongoose.model<ICar>('Car', carSchema);
 
-export default carModel;
+export default CarModel;

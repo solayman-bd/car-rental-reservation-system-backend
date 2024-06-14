@@ -28,9 +28,15 @@ const carUpdateValidationSchema = z.object({
     pricePerHour: carValidationSchema.shape.body.shape.pricePerHour.optional(),
   }),
 });
-
+const carReturnValidationSchema = z.object({
+  body: z.object({
+    bookingId: z.string(),
+    endTime: z.string().regex(/^\d{2}:\d{2}$/), // Validate time format HH:mm
+  }),
+});
 // Export the validation schemas
 export const carValidations = {
   carValidationSchema,
   carUpdateValidationSchema,
+  carReturnValidationSchema,
 };

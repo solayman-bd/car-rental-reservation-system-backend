@@ -1,5 +1,4 @@
-import { JwtPayload } from 'jsonwebtoken';
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 export default interface ICar extends Document {
   name: string;
   description: string;
@@ -8,10 +7,9 @@ export default interface ICar extends Document {
   features: string[];
   pricePerHour: number;
   isDeleted: boolean;
-  status: 'available' | 'not available';
+  status: 'available' | 'unavailable';
 }
-
-export interface IDecodedToken extends JwtPayload {
-  userId: string;
-  role: 'admin' | 'user';
+export interface IReturn {
+  bookingId: string;
+  endTime: string;
 }
