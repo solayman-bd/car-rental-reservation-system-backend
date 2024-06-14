@@ -48,3 +48,12 @@ To get started with the Car Rental Reservation System Backend, follow these step
    BCRYPT_SALT_ROUNDS=10 # Set your bcrypt salt rounds
    JWT_ACCESS_SECRET=your_access_token_secret_key # Set your JWT access token secret key
    JWT_ACCESS_EXPIRES_IN=24h # Set your JWT access token expiration time
+4. **Start the Development Server**
+
+   ```bash
+   npm run start:dev
+
+   ```
+
+5. **APIs examples:**
+   check the postman_collection.json file attached in this repository
