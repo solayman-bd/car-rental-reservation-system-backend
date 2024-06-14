@@ -42,12 +42,14 @@ To get started with the Car Rental Reservation System Backend, follow these step
    ```
 3. **Set Up Environment Variables**
    Create a .env file in the root directory with the following variables:
+   ```bash
    NODE_ENV=development
    PORT=3000 # Choose a port where you want to run the application
    DATABASE_URL=mongodb://localhost:27017/car_rental_system # Use your MongoDB URL
    BCRYPT_SALT_ROUNDS=10 # Set your bcrypt salt rounds
    JWT_ACCESS_SECRET=your_access_token_secret_key # Set your JWT access token secret key
    JWT_ACCESS_EXPIRES_IN=24h # Set your JWT access token expiration time
+   ```
 4. **Start the Development Server**
 
    ```bash
