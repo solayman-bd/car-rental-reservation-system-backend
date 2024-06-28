@@ -1,4 +1,4 @@
-import { TErrorSources, TGenericErrorResponse } from '../interface/error';
+import { TErrorMessages, TGenericErrorResponse } from '../interface/error';
 
 const handleDuplicateError = (err: {
   message: string;
@@ -9,7 +9,7 @@ const handleDuplicateError = (err: {
   // The extracted value will be in the first capturing group
   const extractedMessage = match ? match[1] : 'Duplicate value';
 
-  const errorSources: TErrorSources = [
+  const errorMessages: TErrorMessages = [
     {
       path: '',
       message: `${extractedMessage} already exists`,
@@ -21,7 +21,7 @@ const handleDuplicateError = (err: {
   return {
     statusCode,
     message: 'Duplicate entry',
-    errorSources,
+    errorMessages,
   };
 };
 
