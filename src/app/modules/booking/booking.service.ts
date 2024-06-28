@@ -119,12 +119,6 @@ const myBookings = async (
         'car',
         '_id name description color isElectric features pricePerHour status isDeleted createdAt updatedAt',
       );
-    if (myBookings.length == 0) {
-      throw new AppError(
-        httpStatus.NOT_FOUND,
-        'You do not have any booking...',
-      );
-    }
     return myBookings;
   } catch (err: any) {
     throw new Error(err);
@@ -150,13 +144,6 @@ const getAllBookingOfASpeceficCarToASpeceficDate = async (
         'car',
         '_id name description color isElectric features pricePerHour status isDeleted createdAt updatedAt',
       );
-
-    if (bookings.length == 0) {
-      throw new AppError(
-        httpStatus.NOT_FOUND,
-        'No bookings found for the specified car and date.',
-      );
-    }
 
     return bookings; // Return the bookings array
   } catch (err) {

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import AppError from '../errors/AppError';
 import { decodeToken } from './decodeToken';
+import httpStatus from 'http-status';
 
 const authGuard =
   (requiredRole: string = '') =>
@@ -9,10 +9,11 @@ const authGuard =
       const { userId, role } = decodeToken(req);
 
       if (requiredRole != '' && requiredRole !== role) {
-        throw new AppError(
-          403,
-          `Resources are not accessible to ${role}. Required role is ${requiredRole}`,
-        );
+        return res.status(httpStatus.UNAUTHORIZED).json({
+          success: false,
+          statusCode: httpStatus.UNAUTHORIZED,
+          message: 'You have no access to this route',
+        });
       }
       req.user = { userId, role };
 

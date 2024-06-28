@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
-import sendResponse from '../../utils/sendResponse';
+import sendResponse, { sendNotFoundResponse } from '../../utils/sendResponse';
 import { bookingService } from './booking.service';
 import { validateObjectId } from '../../utils/validateObjectId';
 import AppError from '../../errors/AppError';
@@ -25,7 +25,7 @@ const bookACar = catchAsync(async (req, res) => {
     statusCode: httpStatus.CREATED,
     success: true,
     message: 'Car booked successfully!',
-    data: { result },
+    data: result,
   });
 });
 
@@ -34,11 +34,15 @@ const myBookings = catchAsync(async (req, res) => {
     req.user.userId,
     req.user.role,
   );
+  const isDataFound = result.length;
+  if (isDataFound == 0) {
+    sendNotFoundResponse(res);
+  }
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'My Bookings retrieved successfully!',
-    data: { result },
+    data: result,
   });
 });
 const getAllBookingOfASpeceficCarToASpeceficDate = catchAsync(
@@ -57,7 +61,10 @@ const getAllBookingOfASpeceficCarToASpeceficDate = catchAsync(
         carId,
         date,
       );
-
+    const isDataFound = result.length;
+    if (isDataFound == 0) {
+      sendNotFoundResponse(res);
+    }
     sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,

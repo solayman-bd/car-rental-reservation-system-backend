@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
-import sendResponse from '../../utils/sendResponse';
+import sendResponse, { sendNotFoundResponse } from '../../utils/sendResponse';
 import { carService } from './car.service';
 import { decodeToken } from '../../utils/decodeToken';
 import { validateObjectId } from '../../utils/validateObjectId';
@@ -13,18 +13,21 @@ const createACar = catchAsync(async (req, res) => {
     statusCode: httpStatus.CREATED,
     success: true,
     message: 'Car created successfully!',
-    data: { result },
+    data: result,
   });
 });
 const getAllCars = catchAsync(async (req, res) => {
   const result = await carService.getAllCars(req.user.userId, req.user.role);
-  const message =
-    result.length === 0 ? 'No car found!' : 'Cars retrieved successfully!';
+  const isDataFound = result.length;
+  if (isDataFound == 0) {
+    sendNotFoundResponse(res);
+  }
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message,
-    data: { result },
+    message: "'Cars retrieved successfully!'",
+    data: result,
   });
 });
 
@@ -37,12 +40,16 @@ const getSingleCar = catchAsync(async (req, res) => {
     req.user.role,
     objectId,
   );
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Car retrieved successfully',
-    data: { result },
-  });
+
+  if (result) {
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Car retrieved successfully',
+      data: result,
+    });
+  }
+  sendNotFoundResponse(res);
 });
 
 const updateSingleCar = catchAsync(async (req, res) => {
@@ -59,7 +66,7 @@ const updateSingleCar = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Car updated successfully',
-    data: { result },
+    data: result,
   });
 });
 
@@ -76,7 +83,7 @@ const deleteSingleCar = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Car deleted successfully',
-    data: { result },
+    data: result,
   });
 });
 const returnTheCar = catchAsync(async (req, res) => {
@@ -89,7 +96,7 @@ const returnTheCar = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Car returned successfully...!',
-    data: { result },
+    data: result,
   });
 });
 
