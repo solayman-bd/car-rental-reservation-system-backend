@@ -4,18 +4,17 @@ import ICar, { IReturn } from './car.interface';
 import UserModel from '../user/user.model';
 import CarModel from './car.model';
 import mongoose from 'mongoose';
-import { IDecodedToken } from '../../interface/tokenInterface';
 
 import BookingModel from '../booking/booking.model';
 import { validateObjectId } from '../../utils/validateObjectId';
 const convertTimeToHours = (timeStr: string) => {
   // Split the time string into hours and minutes
-  let timeParts = timeStr.split(':');
-  let hours = parseInt(timeParts[0]);
-  let minutes = parseInt(timeParts[1]);
+  const timeParts = timeStr.split(':');
+  const hours = parseInt(timeParts[0]);
+  const minutes = parseInt(timeParts[1]);
 
   // Calculate the total hours since midnight
-  let totalHours = hours + minutes / 60;
+  const totalHours = hours + minutes / 60;
 
   return totalHours;
 };
