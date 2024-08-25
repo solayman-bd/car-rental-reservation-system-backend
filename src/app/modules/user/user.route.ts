@@ -16,4 +16,12 @@ router.post(
   userControllers.signInUser,
 );
 
+router.post('/signout', userControllers.signout);
+
+router.post(
+  '/refresh-token',
+  validateRequest(userValidations.refreshTokenValidationSchema),
+  userControllers.refreshToken,
+);
+
 export const userRoutes = router;

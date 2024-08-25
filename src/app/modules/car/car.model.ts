@@ -1,12 +1,17 @@
 import mongoose, { Schema } from 'mongoose';
 import ICar from './car.interface';
+
 // Define the schema for the Car model
 const carSchema = new Schema<ICar>({
   name: { type: String, required: true },
   description: { type: String, required: true },
   color: { type: String, required: true },
   isElectric: { type: Boolean, required: true },
-  features: { type: [String], required: true },
+  basicFeatures: { type: [String], required: true },
+  additionalFeatures: {
+    type: [{ name: String, feePerHour: Number }],
+    required: true,
+  },
   pricePerHour: { type: Number, required: true },
   isDeleted: { type: Boolean, default: false },
   status: {
@@ -14,6 +19,8 @@ const carSchema = new Schema<ICar>({
     default: 'available',
     enum: ['available', 'unavailable'],
   },
+  isCurrentlyHired: { type: Boolean, default: false },
+  locationWhereAvailable: { type: [String], required: true },
 });
 
 // Create and export the Car model

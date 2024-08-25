@@ -2,9 +2,7 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse, { sendNotFoundResponse } from '../../utils/sendResponse';
 import { carService } from './car.service';
-import { decodeToken } from '../../utils/decodeToken';
 import { validateObjectId } from '../../utils/validateObjectId';
-import { Response, Request } from 'express';
 
 // Controller functions
 const createACar = catchAsync(async (req, res) => {

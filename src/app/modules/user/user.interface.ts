@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 export default interface IUser extends Document {
   name: string;
   email: string;
@@ -6,5 +6,6 @@ export default interface IUser extends Document {
   password: string;
   phone: string;
   address: string;
+  bookings: mongoose.Types.ObjectId[];
   comparePassword(candidatePassword: string): Promise<boolean>;
 }

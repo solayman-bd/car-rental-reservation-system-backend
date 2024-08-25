@@ -6,17 +6,19 @@ type TResponse<T> = {
   success: boolean;
   message?: string;
   data: T;
-  token?: string;
+  accessToken?: string;
+  refreshToken?: string;
 };
 
 const sendResponse = <T>(res: Response, data: TResponse<T>) => {
-  if (data.token) {
+  if (data.accessToken) {
     res.status(data?.statusCode).json({
       success: data.success,
       statusCode: data.statusCode,
       message: data.message,
       data: data.data,
-      token: data.token,
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken,
     });
   } else {
     res.status(data?.statusCode).json({

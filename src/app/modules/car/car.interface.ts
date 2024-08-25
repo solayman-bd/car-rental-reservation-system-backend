@@ -4,12 +4,18 @@ export default interface ICar extends Document {
   description: string;
   color: string;
   isElectric: boolean;
-  features: string[];
+  basicFeatures: string[];
+  additionalFeatures: {
+    name: string;
+    feePerHour: number;
+  }[];
   pricePerHour: number;
   isDeleted: boolean;
   status: 'available' | 'unavailable';
+  isCurrentlyHired: boolean;
+  locationWhereAvailable: string[];
 }
 export interface IReturn {
-  bookingId: string;
+  bookingId: mongoose.Types.ObjectId;
   endTime: string;
 }

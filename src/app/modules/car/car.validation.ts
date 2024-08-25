@@ -11,10 +11,15 @@ const carValidationSchema = z.object({
       .min(10, { message: 'Description must be at least 10 characters long' }),
     color: z.string(),
     isElectric: z.boolean(),
-    features: z.array(z.string()),
+    basicFeatures: z.array(z.string()),
+    additionalFeatures: z.array(
+      z.object({ name: z.string(), feePerHour: z.number() }),
+    ),
     pricePerHour: z
       .number()
       .min(0, { message: 'Price per hour must be non-negative' }),
+    isCurrentlyHired: z.boolean().optional(),
+    locationWhereAvailable: z.array(z.string()),
   }),
 });
 // Create a partial schema for updates
@@ -24,7 +29,7 @@ const carUpdateValidationSchema = z.object({
     description: carValidationSchema.shape.body.shape.description.optional(),
     color: carValidationSchema.shape.body.shape.color.optional(),
     isElectric: carValidationSchema.shape.body.shape.isElectric.optional(),
-    features: carValidationSchema.shape.body.shape.features.optional(),
+    features: carValidationSchema.shape.body.shape.basicFeatures.optional(),
     pricePerHour: carValidationSchema.shape.body.shape.pricePerHour.optional(),
   }),
 });

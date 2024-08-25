@@ -9,8 +9,9 @@ const userSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
     password: { type: String, required: true },
-    phone: { type: String, required: true },
-    address: { type: String, required: true },
+    phone: { type: String, required: false },
+    address: { type: String, required: false },
+    bookings: [{ type: Schema.Types.ObjectId, required: false }],
   },
   { timestamps: true },
 );

@@ -1,12 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import { decodeToken } from './decodeToken';
+
 import httpStatus from 'http-status';
+import { handleTokenFromRequest } from './handleTokenFromRequest';
 
 const authGuard =
   (requiredRole: string = '') =>
   (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { userId, role } = decodeToken(req);
+      const { userId, role } = handleTokenFromRequest(req);
 
       if (requiredRole != '' && requiredRole !== role) {
         return res.status(httpStatus.UNAUTHORIZED).json({

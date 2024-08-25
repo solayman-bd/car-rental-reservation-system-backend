@@ -4,6 +4,8 @@ import IUser from './user.interface';
 import UserModel from './user.model';
 import { createToken } from './user.utils';
 import config from '../../config';
+import { verifyToken } from '../../utils/verifyToken';
+import { IDecodedToken } from '../../interface/tokenInterface';
 
 const signUpUser = async (payload: IUser) => {
   try {
@@ -17,17 +19,25 @@ const signUpUser = async (payload: IUser) => {
     const user = await UserModel.create(payload);
 
     // Return user object without password
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userWithoutPassword } = user.toObject();
     return userWithoutPassword;
-  } catch (err: any) {
+  } catch (err) {
     // Handle errors appropriately
-    throw new Error(err);
+    if (err instanceof AppError) {
+      throw err;
+    } else {
+      throw new AppError(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        'Internal Server Error',
+      );
+    }
   }
 };
 
 const signInUser = async (
   payload: Partial<IUser>,
-): Promise<{ user: IUser; token: string }> => {
+): Promise<{ user: IUser; accessToken: string; refreshToken: string }> => {
   try {
     // Ensure email and password are provided
     if (!payload.email || !payload.password) {
@@ -58,13 +68,24 @@ const signInUser = async (
     };
 
     // Remove sensitive fields from user object
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userData } = user.toObject();
     const accessToken: string = createToken(
       jwtPayload,
       config.jwt_access_secret as string,
       config.jwt_access_expires_in as string,
     );
-    return { user: userData as IUser, token: accessToken };
+    const refreshToken: string = createToken(
+      jwtPayload,
+      config.jwt_refresh_secret as string,
+      config.jwt_refresh_expires_in as string,
+    );
+
+    return {
+      user: userData as IUser,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    };
   } catch (err) {
     // Ensure we throw an AppError if it's already one, or wrap other errors
     if (err instanceof AppError) {
@@ -77,7 +98,46 @@ const signInUser = async (
     }
   }
 };
+
+const refreshToken = async (token: string) => {
+  if (!token) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'Please sign in...');
+  }
+  // checking if the given token is valid
+  const decoded = verifyToken(
+    token,
+    config.jwt_refresh_secret as string,
+  ) as IDecodedToken;
+  if (!decoded) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'Token verification failed...');
+  }
+  const { userId } = decoded;
+
+  // checking if the user is exist
+  const existingUser = await UserModel.findById(userId);
+
+  if (!existingUser) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
+  }
+
+  const jwtPayload = {
+    userId: existingUser._id as string,
+    role: existingUser.role,
+  };
+
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string,
+  );
+
+  return {
+    accessToken,
+  };
+};
+
 export const userService = {
   signInUser,
   signUpUser,
+  refreshToken,
 };
