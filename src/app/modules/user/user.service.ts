@@ -6,6 +6,8 @@ import { createToken } from './user.utils';
 import config from '../../config';
 import { verifyToken } from '../../utils/verifyToken';
 import { IDecodedToken } from '../../interface/tokenInterface';
+import mongoose from 'mongoose';
+import { handleServiceError } from '../../utils/handleServiceError';
 
 const signUpUser = async (payload: IUser) => {
   try {
@@ -23,15 +25,7 @@ const signUpUser = async (payload: IUser) => {
     const { password, ...userWithoutPassword } = user.toObject();
     return userWithoutPassword;
   } catch (err) {
-    // Handle errors appropriately
-    if (err instanceof AppError) {
-      throw err;
-    } else {
-      throw new AppError(
-        httpStatus.INTERNAL_SERVER_ERROR,
-        'Internal Server Error',
-      );
-    }
+    handleServiceError(err);
   }
 };
 
@@ -87,57 +81,81 @@ const signInUser = async (
       refreshToken: refreshToken,
     };
   } catch (err) {
-    // Ensure we throw an AppError if it's already one, or wrap other errors
-    if (err instanceof AppError) {
-      throw err;
-    } else {
-      throw new AppError(
-        httpStatus.INTERNAL_SERVER_ERROR,
-        'Internal Server Error',
-      );
-    }
+    handleServiceError(err);
+    return undefined as never;
   }
 };
 
 const refreshToken = async (token: string) => {
-  if (!token) {
-    throw new AppError(httpStatus.UNAUTHORIZED, 'Please sign in...');
+  try {
+    if (!token) {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'Please sign in...');
+    }
+    // checking if the given token is valid
+    const decoded = verifyToken(
+      token,
+      config.jwt_refresh_secret as string,
+    ) as IDecodedToken;
+    if (!decoded) {
+      throw new AppError(
+        httpStatus.UNAUTHORIZED,
+        'Token verification failed...',
+      );
+    }
+    const { userId } = decoded;
+
+    // checking if the user is exist
+    const existingUser = await UserModel.findById(userId);
+
+    if (!existingUser) {
+      throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
+    }
+
+    const jwtPayload = {
+      userId: existingUser._id as string,
+      role: existingUser.role,
+    };
+
+    const accessToken = createToken(
+      jwtPayload,
+      config.jwt_access_secret as string,
+      config.jwt_access_expires_in as string,
+    );
+
+    return {
+      accessToken,
+    };
+  } catch (err) {
+    handleServiceError(err);
   }
-  // checking if the given token is valid
-  const decoded = verifyToken(
-    token,
-    config.jwt_refresh_secret as string,
-  ) as IDecodedToken;
-  if (!decoded) {
-    throw new AppError(httpStatus.UNAUTHORIZED, 'Token verification failed...');
+};
+const updateUser = async (
+  userId: mongoose.Types.ObjectId,
+  payload: Partial<IUser>,
+) => {
+  try {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+    }
+
+    // Update the car with the new payload
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...updatedUser } = (await UserModel.findByIdAndUpdate(
+      userId,
+      { $set: payload },
+      { new: true },
+    )) as IUser;
+
+    return updatedUser;
+  } catch (err) {
+    handleServiceError(err);
   }
-  const { userId } = decoded;
-
-  // checking if the user is exist
-  const existingUser = await UserModel.findById(userId);
-
-  if (!existingUser) {
-    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
-  }
-
-  const jwtPayload = {
-    userId: existingUser._id as string,
-    role: existingUser.role,
-  };
-
-  const accessToken = createToken(
-    jwtPayload,
-    config.jwt_access_secret as string,
-    config.jwt_access_expires_in as string,
-  );
-
-  return {
-    accessToken,
-  };
 };
 
 export const userService = {
   signInUser,
   signUpUser,
   refreshToken,
+  updateUser,
 };

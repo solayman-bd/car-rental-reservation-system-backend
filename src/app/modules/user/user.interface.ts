@@ -7,5 +7,6 @@ export default interface IUser extends Document {
   phone: string;
   address: string;
   bookings: mongoose.Types.ObjectId[];
+  preferences: string[];
   comparePassword(candidatePassword: string): Promise<boolean>;
 }

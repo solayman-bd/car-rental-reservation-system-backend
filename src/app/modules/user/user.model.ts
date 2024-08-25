@@ -12,6 +12,7 @@ const userSchema = new Schema<IUser>(
     phone: { type: String, required: false },
     address: { type: String, required: false },
     bookings: [{ type: Schema.Types.ObjectId, required: false }],
+    preferences: [{ type: String, required: false }],
   },
   { timestamps: true },
 );

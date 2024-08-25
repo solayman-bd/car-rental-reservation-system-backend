@@ -17,9 +17,21 @@ const userSignUpValidationSchema = z.object({
     address: z
       .string()
       .min(5, { message: 'Address must be at least 5 characters long' }),
+    preferences: z.array(z.string()).optional(),
   }),
 });
-
+const userUpdateValidationSchema = z.object({
+  body: z.object({
+    name: userSignUpValidationSchema.shape.body.shape.name.optional(),
+    email: userSignUpValidationSchema.shape.body.shape.email.optional(),
+    role: userSignUpValidationSchema.shape.body.shape.role.optional(),
+    password: userSignUpValidationSchema.shape.body.shape.password.optional(),
+    phone: userSignUpValidationSchema.shape.body.shape.phone.optional(),
+    address: userSignUpValidationSchema.shape.body.shape.address.optional(),
+    preferences:
+      userSignUpValidationSchema.shape.body.shape.preferences.optional(),
+  }),
+});
 const userSignInValidationSchema = z.object({
   body: z.object({
     email: z
@@ -41,4 +53,5 @@ export const userValidations = {
   userSignUpValidationSchema,
   userSignInValidationSchema,
   refreshTokenValidationSchema,
+  userUpdateValidationSchema,
 };

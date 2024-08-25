@@ -10,7 +10,7 @@ const carSchema = new Schema<ICar>({
   basicFeatures: { type: [String], required: true },
   additionalFeatures: {
     type: [{ name: String, feePerHour: Number }],
-    required: true,
+    required: false,
   },
   pricePerHour: { type: Number, required: true },
   isDeleted: { type: Boolean, default: false },

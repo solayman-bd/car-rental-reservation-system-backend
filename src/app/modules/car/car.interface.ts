@@ -18,4 +18,5 @@ export default interface ICar extends Document {
 export interface IReturn {
   bookingId: mongoose.Types.ObjectId;
   endTime: string;
+  returningDate: string;
 }

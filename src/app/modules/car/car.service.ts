@@ -7,16 +7,36 @@ import mongoose from 'mongoose';
 
 import BookingModel from '../booking/booking.model';
 import { validateObjectId } from '../../utils/validateObjectId';
-const convertTimeToHours = (timeStr: string) => {
-  // Split the time string into hours and minutes
-  const timeParts = timeStr.split(':');
-  const hours = parseInt(timeParts[0]);
-  const minutes = parseInt(timeParts[1]);
+const calculateTotalCost = (costCalcData: any): number => {
+  const { mainCost, additionalCost } = costCalcData;
 
-  // Calculate the total hours since midnight
-  const totalHours = hours + minutes / 60;
+  // Extract date and time information
+  const { hiringDate, startTime } = mainCost.hired;
+  const { returningDate, endTime } = mainCost.returned;
 
-  return totalHours;
+  // Convert date and time strings to Date objects
+  const startDateTime = new Date(`${hiringDate}T${startTime}`);
+  const endDateTime = new Date(`${returningDate}T${endTime}`);
+
+  // Calculate the total hours between hiring and returning
+  const totalHours =
+    (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60);
+
+  // Calculate the main cost
+  const mainCostTotal = totalHours * mainCost.feePerHour;
+
+  // Calculate the additional cost
+  const additionalCostTotal = additionalCost.reduce(
+    (acc: number, feePerHour: number) => {
+      return acc + feePerHour * totalHours;
+    },
+    0,
+  );
+
+  // Calculate the total cost
+  const totalCost = mainCostTotal + additionalCostTotal;
+
+  return totalCost;
 };
 
 const createACar = async (payload: ICar, userId: mongoose.Types.ObjectId) => {
@@ -183,7 +203,7 @@ const returnTheCar = async (
       );
     }
 
-    const { bookingId, endTime } = payload;
+    const { bookingId, endTime, returningDate } = payload;
     const isValidBookingId = validateObjectId(bookingId);
     // Find the booking
     const booking =
@@ -191,11 +211,22 @@ const returnTheCar = async (
     if (!booking) {
       throw new AppError(httpStatus.NOT_FOUND, 'Booking not found.');
     }
+    // Convert dates to Date objects for comparison
+    const hiringDate = new Date(booking.hiringDate);
+    const returningDateObj = new Date(returningDate);
+
+    // Check if returningDate is after hiringDate
+    if (returningDateObj <= hiringDate) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        'Returning date must be after hiring date.',
+      );
+    }
 
     // Update the booking with endTime
     const updatedBooking = await BookingModel.findByIdAndUpdate(
       isValidBookingId,
-      { $set: { endTime: endTime } },
+      { $set: { endTime: endTime, returningDate: returningDate } },
       { new: true, session },
     );
     if (!updatedBooking) {
@@ -208,7 +239,7 @@ const returnTheCar = async (
     // Update car status to available
     const updatedCar = await CarModel.findByIdAndUpdate(
       updatedBooking.car,
-      { $set: { status: 'available' } },
+      { $set: { status: 'available', isCurrentlyHired: false } },
       { new: true, session },
     );
     if (!updatedCar) {
@@ -218,11 +249,22 @@ const returnTheCar = async (
       );
     }
 
+    const costCalcData = {
+      mainCost: {
+        hired: { hiringDate: booking.hiringDate, startTime: booking.startTime },
+        returned: { returningDate: returningDate, endTime },
+        feePerHour: updatedCar.pricePerHour,
+      },
+      additionalCost: booking.additionalFeatures.map((item) => {
+        const matchedFeature = updatedCar.additionalFeatures.find(
+          (feature) => feature.name === item,
+        );
+        return matchedFeature ? matchedFeature.feePerHour : 0;
+      }),
+    };
+
     // Calculate total cost and save
-    const totalCost =
-      (convertTimeToHours(endTime) -
-        convertTimeToHours(updatedBooking.startTime)) *
-      updatedCar.pricePerHour;
+    const totalCost = calculateTotalCost(costCalcData);
     updatedBooking.totalCost = totalCost;
     await updatedBooking.save({ session });
 

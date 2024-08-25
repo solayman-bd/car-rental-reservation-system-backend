@@ -1,11 +1,12 @@
 import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
-import { IDecodedToken } from '../../interface/tokenInterface';
+
 import { IBooking } from './booking.interface';
 import UserModel from '../user/user.model';
 import BookingModel from './booking.model';
 import CarModel from '../car/car.model';
 import mongoose, { ClientSession } from 'mongoose';
+import { handleServiceError } from '../../utils/handleServiceError';
 
 const ERROR_MESSAGES = {
   UNAUTHORIZED: 'Car can only be booked by the user not admin.',
@@ -14,6 +15,9 @@ const ERROR_MESSAGES = {
     'Car is not registered, deleted, or not available.',
   BOOKING_DETAILS_NOT_FOUND: 'Booking details could not be fetched.',
   CAR_UPDATE_FAILED: 'Car not found or could not be updated.',
+  LOCATION_NOT_AVAILABLE: 'This car is not available to this location...',
+  ADDITIONAL_FEATURES_NOT_AVAILABLE:
+    'These additional features are not available to this car...',
 };
 
 const bookACar = async (
@@ -40,13 +44,41 @@ const bookACar = async (
 
     // Check if car exists and is available for booking
     const car = await CarModel.findById(payload.carId).session(session);
-    if (!car || car.isDeleted || car.status !== 'available') {
+    if (
+      !car ||
+      car.isDeleted ||
+      car.status !== 'available' ||
+      car.isCurrentlyHired
+    ) {
       throw new AppError(
         httpStatus.NOT_FOUND,
         ERROR_MESSAGES.CAR_NOT_FOUND_OR_UNAVAILABLE,
       );
     }
+    // Check if startLocation matches any location in the car's array of locations
+    const locationMatch = car.locationWhereAvailable.some(
+      (location) => location === payload.startLocation,
+    );
+    if (!locationMatch) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        ERROR_MESSAGES.LOCATION_NOT_AVAILABLE,
+      );
+    }
+    // Check if additionalFeatures in payload match with the car's additionalFeatures
 
+    const additionalFeaturesMatch = payload.additionalFeatures.every(
+      (feature) =>
+        car.additionalFeatures.some(
+          (carFeature) => carFeature.name === feature,
+        ),
+    );
+    if (!additionalFeaturesMatch) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        ERROR_MESSAGES.ADDITIONAL_FEATURES_NOT_AVAILABLE,
+      );
+    }
     // Set user and car references
     payload.user = new mongoose.Types.ObjectId(userId);
     payload.car = payload.carId;
@@ -56,7 +88,7 @@ const bookACar = async (
     // Update car availability status
     const updatedCar = await CarModel.findByIdAndUpdate(
       payload.carId,
-      { $set: { status: 'unavailable' } },
+      { $set: { status: 'unavailable', isCurrentlyHired: true } },
       { new: true, session },
     ).session(session);
 
@@ -66,6 +98,10 @@ const bookACar = async (
         ERROR_MESSAGES.CAR_UPDATE_FAILED,
       );
     }
+
+    // Update user bookings array
+    user.bookings.push(booking[0]._id);
+    await user.save({ session });
     // Populate user and car details in the booking document
     const populatedBooking = await BookingModel.findById(booking[0]._id)
       .populate('user', '_id name email role phone address')
@@ -130,28 +166,48 @@ const getAllBookingOfASpeceficCarToASpeceficDate = async (
   carId: mongoose.Types.ObjectId,
   date: string,
 ) => {
+  // Check if user exists
+  const user = await UserModel.findById(userId);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found.');
+  }
+
+  // Query bookings
+  const bookings = await BookingModel.find({ carId, date })
+    .populate('user', '_id name email role phone address')
+    .populate(
+      'car',
+      '_id name description color isElectric features pricePerHour status isDeleted createdAt updatedAt',
+    );
+
+  return bookings; // Return the bookings array
+};
+
+const changeBookingStatus = async (
+  bookingId: mongoose.Types.ObjectId,
+  status: 'approved' | 'pending',
+) => {
   try {
-    // Check if user exists
-    const user = await UserModel.findById(userId);
-    if (!user) {
-      throw new AppError(httpStatus.NOT_FOUND, 'User not found.');
+    const booking = await BookingModel.findById(bookingId);
+    if (!booking) {
+      throw new AppError(httpStatus.NOT_FOUND, 'Booking not found');
     }
 
-    // Query bookings
-    const bookings = await BookingModel.find({ carId, date })
-      .populate('user', '_id name email role phone address')
-      .populate(
-        'car',
-        '_id name description color isElectric features pricePerHour status isDeleted createdAt updatedAt',
-      );
+    // Update the booking status
+    booking.status = status;
 
-    return bookings; // Return the bookings array
+    // Save the updated booking
+    const updatedBooking = await booking.save();
+
+    return updatedBooking;
   } catch (err) {
-    throw err; // Propagate the caught error
+    handleServiceError(err);
   }
 };
+
 export const bookingService = {
   bookACar,
   myBookings,
   getAllBookingOfASpeceficCarToASpeceficDate,
+  changeBookingStatus,
 };

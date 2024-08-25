@@ -59,10 +59,19 @@ const signout = catchAsync(async (req, res) => {
     data: null,
   });
 });
-
+const updateUser = catchAsync(async (req, res) => {
+  const result = await userService.updateUser(req.user.userId, req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User updated successfully',
+    data: result,
+  });
+});
 export const userControllers = {
   signInUser,
   signUpUser,
   refreshToken,
   signout,
+  updateUser,
 };
