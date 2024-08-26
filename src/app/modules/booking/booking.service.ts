@@ -7,6 +7,7 @@ import BookingModel from './booking.model';
 import CarModel from '../car/car.model';
 import mongoose, { ClientSession } from 'mongoose';
 import { handleServiceError } from '../../utils/handleServiceError';
+import { BOOKING_STATUS, TBookingStatus } from './booking.constant';
 
 const ERROR_MESSAGES = {
   UNAUTHORIZED: 'Car can only be booked by the user not admin.',
@@ -185,7 +186,7 @@ const getAllBookingOfASpeceficCarToASpeceficDate = async (
 
 const changeBookingStatus = async (
   bookingId: mongoose.Types.ObjectId,
-  status: 'approved' | 'pending',
+  status: TBookingStatus,
 ) => {
   try {
     const booking = await BookingModel.findById(bookingId);
@@ -198,6 +199,81 @@ const changeBookingStatus = async (
 
     // Save the updated booking
     const updatedBooking = await booking.save();
+    // If the status is cancelled, update the user's bookings
+    if (status === BOOKING_STATUS.cancelled) {
+      // Find the user
+      const user = await UserModel.findById(booking.user);
+      if (user) {
+        // Remove the booking from the user's bookings
+        user.bookings = user.bookings.filter((item) => !item.equals(bookingId));
+        // Save the updated user
+        await user.save();
+      }
+    }
+
+    return updatedBooking;
+  } catch (err) {
+    handleServiceError(err);
+  }
+};
+const updateBooking = async (
+  userId: mongoose.Types.ObjectId,
+  bookingId: mongoose.Types.ObjectId,
+  payload: Partial<IBooking>,
+) => {
+  try {
+    // Find the user and check for existence
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+    }
+
+    // Fetch the booking and check for existence
+    const booking = await BookingModel.findById(bookingId);
+    if (!booking) {
+      throw new AppError(httpStatus.NOT_FOUND, 'Booking not found');
+    }
+
+    // Role-based status change checks
+    if (
+      (payload?.status === BOOKING_STATUS.approved ||
+        payload?.status === BOOKING_STATUS.pending) &&
+      user.role === 'user'
+    ) {
+      throw new AppError(
+        httpStatus.CONFLICT,
+        `Only admin can change the status to ${payload?.status}...`,
+      );
+    }
+
+    // Prevent status changes for approved bookings by users
+    if (booking.status === BOOKING_STATUS.approved && user.role === 'user') {
+      throw new AppError(
+        httpStatus.CONFLICT,
+        'You cannot update the booking as it is already approved...',
+      );
+    }
+
+    // Update the booking with the new payload
+    const updatedBooking = (await BookingModel.findByIdAndUpdate(
+      bookingId,
+      { $set: payload },
+      { new: true },
+    )) as IBooking;
+
+    // Handle cancellation status
+    if (payload?.status === BOOKING_STATUS.cancelled) {
+      // Find the user associated with the booking
+      const bookingUser = await UserModel.findById(updatedBooking.user);
+      if (bookingUser) {
+        // Remove the booking from the user's bookings
+        bookingUser.bookings = bookingUser.bookings.filter(
+          (item) => item !== bookingId,
+        );
+        // Save the updated user
+        await bookingUser.save();
+      }
+    }
 
     return updatedBooking;
   } catch (err) {
@@ -210,4 +286,5 @@ export const bookingService = {
   myBookings,
   getAllBookingOfASpeceficCarToASpeceficDate,
   changeBookingStatus,
+  updateBooking,
 };

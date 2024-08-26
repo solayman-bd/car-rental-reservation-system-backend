@@ -87,9 +87,28 @@ const changeBookingStatus = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+const updateBooking = catchAsync(async (req, res) => {
+  const bookingId = req.params.bookingId;
+  const objectId = validateObjectId(bookingId);
+  const result = await bookingService.updateBooking(
+    req.user.userId,
+    objectId,
+    req.body,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `Booking is updated!`,
+    data: result,
+  });
+});
+
 export const bookingControllers = {
   bookACar,
   myBookings,
   getAllBookingOfASpeceficCarToASpeceficDate,
   changeBookingStatus,
+  updateBooking,
 };

@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import { IBooking } from './booking.interface';
+import { BOOKING_STATUS } from './booking.constant';
 
 const bookingSchema = new Schema<IBooking>({
   carId: { type: Schema.Types.ObjectId, required: true },
@@ -10,7 +11,15 @@ const bookingSchema = new Schema<IBooking>({
   user: { type: Schema.Types.ObjectId, ref: 'User' },
   car: { type: Schema.Types.ObjectId, ref: 'Car' },
   totalCost: { type: Number, default: 0 },
-  status: { type: String, enum: ['pending', 'approved'], default: 'pending' },
+  status: {
+    type: String,
+    enum: [
+      BOOKING_STATUS.approved,
+      BOOKING_STATUS.pending,
+      BOOKING_STATUS.cancelled,
+    ],
+    default: BOOKING_STATUS.pending,
+  },
   additionalFeatures: { type: [String], required: false },
   startLocation: { type: String, required: true },
 });

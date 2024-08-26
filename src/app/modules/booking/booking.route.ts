@@ -18,6 +18,12 @@ router.post(
   authGuard('admin'),
   bookingControllers.changeBookingStatus,
 );
+router.post(
+  '/update-booking',
+  validateRequest(bookingValidations.updateBookingSchema),
+  authGuard(),
+  bookingControllers.updateBooking,
+);
 router.get(
   '/',
   authGuard('admin'),

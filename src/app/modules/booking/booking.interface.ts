@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import IUser from '../user/user.interface';
 import ICar from '../car/car.interface';
+import { TBookingStatus } from './booking.constant';
 
 export interface IBooking {
   carId: mongoose.Types.ObjectId;
@@ -11,7 +12,7 @@ export interface IBooking {
   user: mongoose.Types.ObjectId | IUser; // Either ObjectId or populated IUser
   car: mongoose.Types.ObjectId | ICar; // Either ObjectId or populated ICar
   totalCost: number; // Will be 0 by default and updated by admin
-  status: 'pending' | 'approved';
+  status: TBookingStatus;
   additionalFeatures: string[];
   startLocation: string;
 }
