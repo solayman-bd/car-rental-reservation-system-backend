@@ -19,7 +19,7 @@ router.post(
   bookingControllers.changeBookingStatus,
 );
 router.post(
-  '/update-booking',
+  '/update-booking/:bookingId',
   validateRequest(bookingValidations.updateBookingSchema),
   authGuard(),
   bookingControllers.updateBooking,

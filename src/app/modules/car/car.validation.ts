@@ -20,6 +20,7 @@ const carValidationSchema = z.object({
       .min(0, { message: 'Price per hour must be non-negative' }),
     isCurrentlyHired: z.boolean().optional(),
     locationWhereAvailable: z.array(z.string()),
+    img: z.array(z.string()).optional(),
   }),
 });
 // Create a partial schema for updates

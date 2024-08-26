@@ -14,6 +14,7 @@ export default interface ICar extends Document {
   status: 'available' | 'unavailable';
   isCurrentlyHired: boolean;
   locationWhereAvailable: string[];
+  img: string[];
 }
 export interface IReturn {
   bookingId: mongoose.Types.ObjectId;

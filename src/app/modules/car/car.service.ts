@@ -211,6 +211,12 @@ const returnTheCar = async (
     if (!booking) {
       throw new AppError(httpStatus.NOT_FOUND, 'Booking not found.');
     }
+    if (booking.status !== 'approved') {
+      throw new AppError(
+        httpStatus.CONFLICT,
+        'This booking is not approved yet... Please approve to return the car..',
+      );
+    }
     // Convert dates to Date objects for comparison
     const hiringDate = new Date(booking.hiringDate);
     const returningDateObj = new Date(returningDate);
