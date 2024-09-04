@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 
 import BookingModel from '../booking/booking.model';
 import { validateObjectId } from '../../utils/validateObjectId';
+import { BOOKING_STATUS } from '../booking/booking.constant';
 const calculateTotalCost = (costCalcData: any): number => {
   const { mainCost, additionalCost } = costCalcData;
 
@@ -68,7 +69,7 @@ const getAllCars = async (
       carsQuery = carsQuery.where('isDeleted').equals(false);
     }
 
-    const result = await carsQuery.exec();
+    const result = await carsQuery.sort({ _id: -1 }).exec();
     return result;
   } catch (err: any) {
     throw new Error(err);
@@ -164,10 +165,15 @@ const deleteSingleCar = async (
     if (!car || car?.isDeleted == true) {
       throw new AppError(
         httpStatus.NOT_FOUND,
-        'Car is not found or the car is deleted..',
+        'Car is not found or the car is already deleted..',
       );
     }
-
+    if (car.isCurrentlyHired) {
+      throw new AppError(
+        httpStatus.CONFLICT,
+        'Car is currently hired. Can not be deleted until returned..',
+      );
+    }
     // Update the car with the new payload
     const sofDeletedCar = await CarModel.findByIdAndUpdate(
       carId,
@@ -232,7 +238,13 @@ const returnTheCar = async (
     // Update the booking with endTime
     const updatedBooking = await BookingModel.findByIdAndUpdate(
       isValidBookingId,
-      { $set: { endTime: endTime, returningDate: returningDate } },
+      {
+        $set: {
+          endTime: endTime,
+          returningDate: returningDate,
+          status: BOOKING_STATUS.returned,
+        },
+      },
       { new: true, session },
     );
     if (!updatedBooking) {
@@ -270,7 +282,7 @@ const returnTheCar = async (
     };
 
     // Calculate total cost and save
-    const totalCost = calculateTotalCost(costCalcData);
+    const totalCost = Math.floor(Number(calculateTotalCost(costCalcData)));
     updatedBooking.totalCost = totalCost;
     await updatedBooking.save({ session });
 

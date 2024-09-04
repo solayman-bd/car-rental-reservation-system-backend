@@ -15,4 +15,7 @@ export interface IBooking {
   status: TBookingStatus;
   additionalFeatures: string[];
   startLocation: string;
+  isPaid: boolean;
+  drivingLicense: string;
+  nid: string;
 }

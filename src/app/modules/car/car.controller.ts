@@ -7,7 +7,7 @@ import { validateObjectId } from '../../utils/validateObjectId';
 // Controller functions
 const createACar = catchAsync(async (req, res) => {
   const result = await carService.createACar(req.body, req.user.userId);
-  sendResponse(res, {
+  return sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
     message: 'Car created successfully!',
@@ -18,10 +18,10 @@ const getAllCars = catchAsync(async (req, res) => {
   const result = await carService.getAllCars(req.user.userId, req.user.role);
   const isDataFound = result.length;
   if (isDataFound == 0) {
-    sendNotFoundResponse(res);
+    return sendNotFoundResponse(res);
   }
 
-  sendResponse(res, {
+  return sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "'Cars retrieved successfully!'",
@@ -40,14 +40,14 @@ const getSingleCar = catchAsync(async (req, res) => {
   );
 
   if (result) {
-    sendResponse(res, {
+    return sendResponse(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: 'Car retrieved successfully',
       data: result,
     });
   }
-  sendNotFoundResponse(res);
+  return sendNotFoundResponse(res);
 });
 
 const updateSingleCar = catchAsync(async (req, res) => {
@@ -60,7 +60,7 @@ const updateSingleCar = catchAsync(async (req, res) => {
     objectId,
     req.body,
   );
-  sendResponse(res, {
+  return sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Car updated successfully',
@@ -77,7 +77,7 @@ const deleteSingleCar = catchAsync(async (req, res) => {
     req.user.role,
     objectId,
   );
-  sendResponse(res, {
+  return sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Car deleted successfully',
@@ -90,7 +90,7 @@ const returnTheCar = catchAsync(async (req, res) => {
     req.user.userId,
     req.user.role,
   );
-  sendResponse(res, {
+  return sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Car returned successfully...!',

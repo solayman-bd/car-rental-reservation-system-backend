@@ -22,6 +22,7 @@ const carSchema = new Schema<ICar>({
   isCurrentlyHired: { type: Boolean, default: false },
   locationWhereAvailable: { type: [String], required: true },
   img: { type: [String], required: false },
+  isFeatured: { type: Boolean, required: false, default: false },
 });
 
 // Create and export the Car model

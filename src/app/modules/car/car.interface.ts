@@ -15,6 +15,7 @@ export default interface ICar extends Document {
   isCurrentlyHired: boolean;
   locationWhereAvailable: string[];
   img: string[];
+  isFeatured: boolean;
 }
 export interface IReturn {
   bookingId: mongoose.Types.ObjectId;

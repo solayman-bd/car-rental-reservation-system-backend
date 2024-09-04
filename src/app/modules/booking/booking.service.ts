@@ -150,12 +150,17 @@ const myBookings = async (
     }
 
     // Create the booking document
-    const myBookings = await BookingModel.find({ user: userId })
+    // Create the booking document
+    const myBookings = await BookingModel.find({
+      user: userId,
+      status: { $in: ['pending', 'approved', 'returned'] }, // Corrected filter for multiple statuses
+    })
       .populate('user', '_id name email role phone address')
       .populate(
         'car',
-        '_id name description color isElectric features pricePerHour status isDeleted createdAt updatedAt',
+        '_id name description color isElectric features pricePerHour status isDeleted createdAt updatedAt locationWhereAvailable additionalFeatures',
       );
+
     return myBookings;
   } catch (err: any) {
     throw new Error(err);
@@ -178,7 +183,7 @@ const getAllBookingOfASpeceficCarToASpeceficDate = async (
     .populate('user', '_id name email role phone address')
     .populate(
       'car',
-      '_id name description color isElectric features pricePerHour status isDeleted createdAt updatedAt',
+      '_id name description color isElectric features pricePerHour status isDeleted createdAt updatedAt locationWhereAvailable additionalFeatures',
     );
 
   return bookings; // Return the bookings array
@@ -280,11 +285,30 @@ const updateBooking = async (
     handleServiceError(err);
   }
 };
+const getAllBookings = async (userId: mongoose.Types.ObjectId) => {
+  try {
+    // Check if user exists
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      throw new AppError(httpStatus.NOT_FOUND, ERROR_MESSAGES.USER_NOT_FOUND);
+    }
+    const allBookings = await BookingModel.find({})
+      .populate('user', '_id name email role phone address')
+      .populate(
+        'car',
+        '_id name description color isElectric features pricePerHour status isDeleted createdAt updatedAt locationWhereAvailable additionalFeatures',
+      );
 
+    return allBookings;
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
 export const bookingService = {
   bookACar,
   myBookings,
   getAllBookingOfASpeceficCarToASpeceficDate,
   changeBookingStatus,
   updateBooking,
+  getAllBookings,
 };

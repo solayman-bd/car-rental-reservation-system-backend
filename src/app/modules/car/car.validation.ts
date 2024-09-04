@@ -21,6 +21,7 @@ const carValidationSchema = z.object({
     isCurrentlyHired: z.boolean().optional(),
     locationWhereAvailable: z.array(z.string()),
     img: z.array(z.string()).optional(),
+    isFeatured: z.boolean().optional(),
   }),
 });
 // Create a partial schema for updates
@@ -40,6 +41,7 @@ const carUpdateValidationSchema = z.object({
       carValidationSchema.shape.body.shape.isCurrentlyHired.optional(),
     locationWhereAvailable:
       carValidationSchema.shape.body.shape.locationWhereAvailable.optional(),
+    isFeatured: carValidationSchema.shape.body.shape.isFeatured.optional(),
   }),
 });
 

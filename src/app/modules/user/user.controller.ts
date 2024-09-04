@@ -3,6 +3,8 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { userService } from './user.service';
 import config from '../../config';
+import mongoose, { isValidObjectId } from 'mongoose';
+import { validateObjectId } from '../../utils/validateObjectId';
 
 const signInUser = catchAsync(async (req, res) => {
   const result = await userService.signInUser(req.body);
@@ -60,7 +62,42 @@ const signout = catchAsync(async (req, res) => {
   });
 });
 const updateUser = catchAsync(async (req, res) => {
-  const result = await userService.updateUser(req.user.userId, req.body);
+  const result = await userService.updateUser(
+    req.user.userId,
+    req.user.role,
+    req.body,
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User updated successfully',
+    data: result,
+  });
+});
+
+const getAllUsers = catchAsync(async (req, res) => {
+  const result = await userService.getAllUser();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'All users retrived successfully...',
+    data: result,
+  });
+});
+const deleteAUser = catchAsync(async (req, res) => {
+  const result = await userService.delteAUser(req.body.userId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User deleted successfully',
+    data: result,
+  });
+});
+const updateUserByAdmin = catchAsync(async (req, res) => {
+  const userId = validateObjectId(req.params.userId);
+
+  const result = await userService.updateUserByAdmin(userId, req.body);
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -74,4 +111,7 @@ export const userControllers = {
   refreshToken,
   signout,
   updateUser,
+  getAllUsers,
+  deleteAUser,
+  updateUserByAdmin,
 };

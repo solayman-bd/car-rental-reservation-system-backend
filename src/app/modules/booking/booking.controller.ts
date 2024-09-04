@@ -104,11 +104,24 @@ const updateBooking = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
+const getAllBookings = catchAsync(async (req, res) => {
+  const result = await bookingService.getAllBookings(req.user.userId);
+  const isDataFound = result.length;
+  if (isDataFound == 0) {
+    sendNotFoundResponse(res);
+  }
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'All Bookings retrieved successfully!',
+    data: result,
+  });
+});
 export const bookingControllers = {
   bookACar,
   myBookings,
   getAllBookingOfASpeceficCarToASpeceficDate,
   changeBookingStatus,
   updateBooking,
+  getAllBookings,
 };

@@ -17,11 +17,15 @@ const bookingSchema = new Schema<IBooking>({
       BOOKING_STATUS.approved,
       BOOKING_STATUS.pending,
       BOOKING_STATUS.cancelled,
+      BOOKING_STATUS.returned,
     ],
     default: BOOKING_STATUS.pending,
   },
   additionalFeatures: { type: [String], required: false },
   startLocation: { type: String, required: true },
+  isPaid: { type: Boolean, required: false, default: false },
+  drivingLicense: { type: String, required: true },
+  nid: { type: String, required: true },
 });
 
 const BookingModel = mongoose.model<IBooking>('Booking', bookingSchema);

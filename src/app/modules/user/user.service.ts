@@ -8,6 +8,7 @@ import { verifyToken } from '../../utils/verifyToken';
 import { IDecodedToken } from '../../interface/tokenInterface';
 import mongoose from 'mongoose';
 import { handleServiceError } from '../../utils/handleServiceError';
+import BookingModel from '../booking/booking.model';
 
 const signUpUser = async (payload: IUser) => {
   try {
@@ -59,6 +60,7 @@ const signInUser = async (
     const jwtPayload = {
       userId: user.id,
       role: user.role,
+      name: user.name,
     };
 
     // Remove sensitive fields from user object
@@ -114,6 +116,7 @@ const refreshToken = async (token: string) => {
     const jwtPayload = {
       userId: existingUser._id as string,
       role: existingUser.role,
+      name: existingUser.name,
     };
 
     const accessToken = createToken(
@@ -131,6 +134,7 @@ const refreshToken = async (token: string) => {
 };
 const updateUser = async (
   userId: mongoose.Types.ObjectId,
+  role: 'user' | 'admin',
   payload: Partial<IUser>,
 ) => {
   try {
@@ -140,12 +144,110 @@ const updateUser = async (
     }
 
     // Update the car with the new payload
+
+    if (role == 'user' && payload.role == 'admin') {
+      throw new AppError(
+        httpStatus.FORBIDDEN,
+        'A user can not change his role to admin..',
+      );
+    }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...updatedUser } = (await UserModel.findByIdAndUpdate(
-      userId,
-      { $set: payload },
-      { new: true },
-    )) as IUser;
+    const { password, ...updatedUser } = (
+      await UserModel.findByIdAndUpdate(
+        userId,
+        { $set: payload },
+        { new: true },
+      )
+    )?.toObject() as IUser;
+
+    return updatedUser;
+  } catch (err) {
+    handleServiceError(err);
+  }
+};
+
+const getAllUser = async () => {
+  try {
+    const allUsers = await UserModel.find({}).select('-password');
+    return allUsers;
+  } catch (err) {
+    return handleServiceError(err);
+  }
+};
+
+const delteAUser = async (userIdToDelete: mongoose.Types.ObjectId) => {
+  try {
+    const user = await UserModel.findById(userIdToDelete);
+    if (!user) {
+      throw new AppError(httpStatus.NOT_FOUND, 'The user not found.');
+    }
+
+    const userBookings = await BookingModel.find({ user: userIdToDelete });
+
+    if (userBookings.length === 0) {
+      await UserModel.deleteOne({ _id: userIdToDelete });
+    } else {
+      for (const booking of userBookings) {
+        if (booking.status === 'pending') {
+          // Delete the user and the booking
+          await BookingModel.deleteOne({ _id: booking._id });
+          const deletedUser = await UserModel.deleteOne({
+            _id: userIdToDelete,
+          });
+          return deletedUser;
+        } else if (booking.status === 'approved') {
+          throw new AppError(
+            httpStatus.FORBIDDEN,
+            'User cannot be deleted because of an approved booking.',
+          );
+        } else if (booking.status === 'returned') {
+          if (booking.isPaid) {
+            // Delete the user and the booking
+            await BookingModel.deleteOne({ _id: booking._id });
+            const deletedUser = await UserModel.deleteOne({
+              _id: userIdToDelete,
+            });
+            return deletedUser;
+          } else {
+            throw new AppError(
+              httpStatus.FORBIDDEN,
+              'User cannot be deleted because the booking is returned but not paid.',
+            );
+          }
+        }
+      }
+    }
+  } catch (err) {
+    handleServiceError(err);
+    return undefined as never;
+  }
+};
+const updateUserByAdmin = async (
+  userId: mongoose.Types.ObjectId,
+  payload: Partial<IUser>,
+) => {
+  try {
+    // Check if the email field is included in the payload
+    if (payload.email) {
+      throw new AppError(
+        httpStatus.BAD_REQUEST,
+        'Admin cannot change the email of the user.',
+      );
+    }
+
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...updatedUser } = (
+      await UserModel.findByIdAndUpdate(
+        userId,
+        { $set: payload },
+        { new: true },
+      )
+    )?.toObject() as IUser;
 
     return updatedUser;
   } catch (err) {
@@ -158,4 +260,7 @@ export const userService = {
   signUpUser,
   refreshToken,
   updateUser,
+  getAllUser,
+  delteAUser,
+  updateUserByAdmin,
 };

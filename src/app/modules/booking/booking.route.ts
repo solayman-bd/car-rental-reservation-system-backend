@@ -29,6 +29,11 @@ router.get(
   authGuard('admin'),
   bookingControllers.getAllBookingOfASpeceficCarToASpeceficDate,
 );
+router.get(
+  '/get-all-bookings',
+  authGuard('admin'),
+  bookingControllers.getAllBookings,
+);
 router.get('/my-bookings', authGuard('user'), bookingControllers.myBookings);
 
 export const bookingRoutes = router;

@@ -24,10 +24,25 @@ router.post(
   validateRequest(userValidations.refreshTokenValidationSchema),
   userControllers.refreshToken,
 );
-router.post(
+router.put(
   '/update-user',
   authGuard(),
   validateRequest(userValidations.userUpdateValidationSchema),
   userControllers.updateUser,
 );
+router.delete(
+  '/delete-a-user',
+  authGuard('admin'),
+  validateRequest(userValidations.userDeleteValidationSchema),
+  userControllers.deleteAUser,
+);
+router.get('/all-users', authGuard('admin'), userControllers.getAllUsers);
+
+router.put(
+  '/update-user-by-admin/:userId',
+  authGuard('admin'),
+  validateRequest(userValidations.userUpdateValidationSchema),
+  userControllers.updateUserByAdmin,
+);
+
 export const userRoutes = router;

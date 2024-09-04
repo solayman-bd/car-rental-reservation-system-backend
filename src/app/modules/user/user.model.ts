@@ -7,12 +7,23 @@ const userSchema = new Schema<IUser>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
+      required: false,
+    },
     password: { type: String, required: true },
     phone: { type: String, required: false },
     address: { type: String, required: false },
     bookings: [{ type: Schema.Types.ObjectId, required: false }],
     preferences: [{ type: String, required: false }],
+    status: {
+      type: String,
+      enum: ['active', 'blocked'],
+      default: 'active',
+      required: false,
+    },
   },
   { timestamps: true },
 );

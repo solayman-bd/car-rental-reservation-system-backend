@@ -8,6 +8,8 @@ const bookingSchema = z.object({
     startTime: z.string().regex(/^\d{2}:\d{2}$/), // Validate time format HH:mm
     additionalFeatures: z.array(z.string()).optional(),
     startLocation: z.string(),
+    drivingLicense: z.string(),
+    nid: z.string(),
   }),
 });
 const bookingStatusChangeSchema = z.object({
@@ -17,6 +19,7 @@ const bookingStatusChangeSchema = z.object({
       BOOKING_STATUS.pending,
       BOOKING_STATUS.approved,
       BOOKING_STATUS.cancelled,
+      BOOKING_STATUS.returned,
     ]),
   }),
 });
@@ -38,8 +41,10 @@ const updateBookingSchema = z.object({
         BOOKING_STATUS.pending,
         BOOKING_STATUS.approved,
         BOOKING_STATUS.cancelled,
+        BOOKING_STATUS.returned,
       ])
       .optional(),
+    isPaid: z.boolean().optional(),
   }),
 });
 export const bookingValidations = {

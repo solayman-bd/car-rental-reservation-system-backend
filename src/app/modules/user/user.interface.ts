@@ -9,4 +9,5 @@ export default interface IUser extends Document {
   bookings: mongoose.Types.ObjectId[];
   preferences: string[];
   comparePassword(candidatePassword: string): Promise<boolean>;
+  status: 'active' | 'blocked';
 }
