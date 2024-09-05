@@ -12,7 +12,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser());
 const corsOptions = {
   // Specify your frontend URL
-  origin: true, // Allow all origins
+  origin: 'http://localhost:5173/', // Allow all origins
   credentials: true, // Allow cookies to be sent
 };
 
