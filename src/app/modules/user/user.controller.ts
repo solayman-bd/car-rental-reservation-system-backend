@@ -3,7 +3,6 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { userService } from './user.service';
 import config from '../../config';
-import mongoose, { isValidObjectId } from 'mongoose';
 import { validateObjectId } from '../../utils/validateObjectId';
 
 const signInUser = catchAsync(async (req, res) => {

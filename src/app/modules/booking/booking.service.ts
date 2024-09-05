@@ -121,6 +121,7 @@ const bookACar = async (
     }
     await session.commitTransaction();
     return populatedBooking;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     if (session) {
       await session.abortTransaction();
@@ -162,6 +163,7 @@ const myBookings = async (
       );
 
     return myBookings;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     throw new Error(err);
   }
@@ -306,6 +308,7 @@ const getAllBookings = async (userId: mongoose.Types.ObjectId) => {
       );
 
     return allBookings;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     throw new Error(err);
   }

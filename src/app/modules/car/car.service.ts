@@ -8,6 +8,7 @@ import mongoose from 'mongoose';
 import BookingModel from '../booking/booking.model';
 import { validateObjectId } from '../../utils/validateObjectId';
 import { BOOKING_STATUS } from '../booking/booking.constant';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const calculateTotalCost = (costCalcData: any): number => {
   const { mainCost, additionalCost } = costCalcData;
 
@@ -48,6 +49,7 @@ const createACar = async (payload: ICar, userId: mongoose.Types.ObjectId) => {
     }
     const result = await CarModel.create(payload);
     return result;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     // Handle errors appropriately
     throw new Error(err);
@@ -74,6 +76,7 @@ const getSingleCar = async (carId: mongoose.Types.ObjectId) => {
       throw new AppError(httpStatus.NOT_FOUND, 'Car not found.');
     }
     return car;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     throw new Error(err);
   }
@@ -113,6 +116,7 @@ const updateSingleCar = async (
     );
 
     return updatedCar;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     throw new Error(err);
   }
@@ -157,6 +161,7 @@ const deleteSingleCar = async (
     );
 
     return sofDeletedCar;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     throw new Error(err);
   }

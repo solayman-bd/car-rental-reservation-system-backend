@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response, ErrorRequestHandler } from 'express';
+import { Request, Response, ErrorRequestHandler } from 'express';
 import { ZodError } from 'zod';
 import config from '../config';
 import AppError from '../errors/AppError';
@@ -12,7 +12,6 @@ const globalErrorHandler: ErrorRequestHandler = (
   err,
   req: Request,
   res: Response,
-  next: NextFunction,
 ) => {
   // Setting default values
   let statusCode = 500;
