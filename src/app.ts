@@ -10,14 +10,7 @@ const app: Application = express();
 // Middleware for parsing JSON and cookies
 app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser());
-const corsOptions = {
-  // Specify your frontend URL
-  origin: 'http://localhost:5173/', // Allow all origins
-  credentials: true, // Allow cookies to be sent
-};
-
-// Enable CORS for any origin
-app.use(cors(corsOptions));
+app.use(cors());
 
 // Root testing route
 app.get('/', (req, res) => {
