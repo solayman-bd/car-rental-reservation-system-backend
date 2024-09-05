@@ -13,8 +13,8 @@ router.post(
   carControllers.createACar,
 );
 
-router.get('/', authGuard(), carControllers.getAllCars);
-router.get('/:id', authGuard(), carControllers.getSingleCar);
+router.get('/', carControllers.getAllCars);
+router.get('/:id', carControllers.getSingleCar);
 
 router.put(
   '/return',

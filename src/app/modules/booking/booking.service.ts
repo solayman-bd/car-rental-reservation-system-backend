@@ -206,6 +206,12 @@ const changeBookingStatus = async (
     const updatedBooking = await booking.save();
     // If the status is cancelled, update the user's bookings
     if (status === BOOKING_STATUS.cancelled) {
+      const bookedCar = await CarModel.findById(booking.carId);
+      if (bookedCar) {
+        bookedCar.isCurrentlyHired = false;
+        bookedCar.status = 'available';
+        await bookedCar.save();
+      }
       // Find the user
       const user = await UserModel.findById(booking.user);
       if (user) {

@@ -15,7 +15,7 @@ const createACar = catchAsync(async (req, res) => {
   });
 });
 const getAllCars = catchAsync(async (req, res) => {
-  const result = await carService.getAllCars(req.user.userId, req.user.role);
+  const result = await carService.getAllCars();
   const isDataFound = result.length;
   if (isDataFound == 0) {
     return sendNotFoundResponse(res);
@@ -32,12 +32,7 @@ const getAllCars = catchAsync(async (req, res) => {
 const getSingleCar = catchAsync(async (req, res) => {
   const { id } = req.params;
   const objectId = validateObjectId(id);
-
-  const result = await carService.getSingleCar(
-    req.user.userId,
-    req.user.role,
-    objectId,
-  );
+  const result = await carService.getSingleCar(objectId);
 
   if (result) {
     return sendResponse(res, {

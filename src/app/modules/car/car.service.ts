@@ -53,51 +53,26 @@ const createACar = async (payload: ICar, userId: mongoose.Types.ObjectId) => {
     throw new Error(err);
   }
 };
-const getAllCars = async (
-  userId: mongoose.Types.ObjectId,
-  role: 'admin' | 'user',
-) => {
+const getAllCars = async () => {
   try {
-    const user = await UserModel.findById(userId);
-    if (!user) {
-      throw new AppError(httpStatus.NOT_FOUND, 'User is not registered.');
-    }
-
-    let carsQuery = CarModel.find({});
-
-    if (role !== 'admin') {
-      carsQuery = carsQuery.where('isDeleted').equals(false);
-    }
-
-    const result = await carsQuery.sort({ _id: -1 }).exec();
+    const result = await CarModel.find({ isDeleted: false })
+      .sort({ _id: -1 })
+      .exec();
     return result;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     throw new Error(err);
   }
 };
 
-const getSingleCar = async (
-  userId: mongoose.Types.ObjectId,
-  role: 'admin' | 'user',
-  carId: mongoose.Types.ObjectId,
-) => {
+const getSingleCar = async (carId: mongoose.Types.ObjectId) => {
   try {
-    const user = await UserModel.findById(userId);
-    if (!user) {
-      throw new AppError(httpStatus.NOT_FOUND, 'User is not registered.');
-    }
-
     let carQuery = CarModel.findById(carId);
-
-    if (role !== 'admin') {
-      carQuery = carQuery.where('isDeleted').equals(false);
-    }
-
+    carQuery = carQuery.where('isDeleted').equals(false);
     const car = await carQuery.exec();
     if (!car) {
       throw new AppError(httpStatus.NOT_FOUND, 'Car not found.');
     }
-
     return car;
   } catch (err: any) {
     throw new Error(err);
