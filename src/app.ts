@@ -25,6 +25,7 @@ app.use(
     credentials: true, // Allow credentials
   }),
 );
+app.options('*', cors());
 // Root testing route
 app.get('/', (req, res) => {
   res.send('Root Testing Route: Server is running!');
