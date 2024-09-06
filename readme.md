@@ -6,7 +6,7 @@ Welcome to the Car Rental Reservation System Backend repository! This project pr
 
 ## Live Demo
 
-Explore the live demo of the application [here](https://car-rental-reservation-system-backend-3.onrender.com).
+Explore the live demo of the application [here](https://car-rental-reservation-system-backend-three.vercel.app).
 
 ## Features
 
