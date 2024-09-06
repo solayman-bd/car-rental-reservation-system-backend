@@ -1,493 +1,712 @@
 {
-    "collection": {
-        "info": {
-            "_postman_id": "63bfd722-ccaf-4b2d-9854-1769c3a8dd9c",
-            "name": "Car-Rental-Reservation-System",
-            "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-            "updatedAt": "2024-06-13T22:05:38.000Z",
-            "uid": "32110446-63bfd722-ccaf-4b2d-9854-1769c3a8dd9c",
-            "createdAt": null,
-            "lastUpdatedBy": null
-        },
+  "collection": {
+    "info": {
+      "_postman_id": "63bfd722-ccaf-4b2d-9854-1769c3a8dd9c",
+      "name": "Car-Rental-Reservation-System",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "updatedAt": "2024-08-24T13:50:03.000Z",
+      "createdAt": "2024-06-13T17:04:53.000Z",
+      "lastUpdatedBy": "32110446",
+      "uid": "32110446-63bfd722-ccaf-4b2d-9854-1769c3a8dd9c"
+    },
+    "item": [
+      {
+        "name": "Car",
         "item": [
-            {
-                "name": "Auth",
-                "item": [
-                    {
-                        "name": "Sign Up",
-                        "id": "4e761959-1ac7-4f36-853d-650b3ce79493",
-                        "protocolProfileBehavior": {
-                            "disableBodyPruning": true
-                        },
-                        "request": {
-                            "method": "POST",
-                            "header": [],
-                            "body": {
-                                "mode": "raw",
-                                "raw": "{\r\n  \"name\": \"Solayman\",\r\n  \"email\": \"solayman@example.com\",\r\n  \"role\": \"admin\", \r\n  \"password\": \"password123\",\r\n  \"phone\": \"1234567890\",\r\n  \"address\": \"123 Main St, City, Country\"\r\n \r\n}",
-                                "options": {
-                                    "raw": {
-                                        "language": "json"
-                                    }
-                                }
-                            },
-                            "url": {
-                                "raw": "{{deployment_url}}/api/auth/signup",
-                                "host": [
-                                    "{{deployment_url}}"
-                                ],
-                                "path": [
-                                    "api",
-                                    "auth",
-                                    "signup"
-                                ]
-                            }
-                        },
-                        "response": [],
-                        "uid": "32110446-4e761959-1ac7-4f36-853d-650b3ce79493"
-                    },
-                    {
-                        "name": "Sign In",
-                        "id": "2e1cc173-4541-4d19-894f-ea36ebad2ad2",
-                        "protocolProfileBehavior": {
-                            "disableBodyPruning": true
-                        },
-                        "request": {
-                            "method": "POST",
-                            "header": [],
-                            "body": {
-                                "mode": "raw",
-                                "raw": "{\r\n  \"email\": \"johndoe@example.com\",\r\n  \"password\": \"password123\"\r\n}",
-                                "options": {
-                                    "raw": {
-                                        "language": "json"
-                                    }
-                                }
-                            },
-                            "url": {
-                                "raw": "{{deployment_url}}/api/auth/signin",
-                                "host": [
-                                    "{{deployment_url}}"
-                                ],
-                                "path": [
-                                    "api",
-                                    "auth",
-                                    "signin"
-                                ]
-                            }
-                        },
-                        "response": [],
-                        "uid": "32110446-2e1cc173-4541-4d19-894f-ea36ebad2ad2"
-                    },
-                    {
-                        "name": "Sign In By Admin",
-                        "id": "c109186b-f417-4118-a525-fe36fcfe435e",
-                        "protocolProfileBehavior": {
-                            "disableBodyPruning": true
-                        },
-                        "request": {
-                            "method": "POST",
-                            "header": [],
-                            "body": {
-                                "mode": "raw",
-                                "raw": "{\r\n  \"email\": \"solayman@example.com\",\r\n  \"password\": \"password123\"\r\n}",
-                                "options": {
-                                    "raw": {
-                                        "language": "json"
-                                    }
-                                }
-                            },
-                            "url": {
-                                "raw": "{{deployment_url}}/api/auth/signin",
-                                "host": [
-                                    "{{deployment_url}}"
-                                ],
-                                "path": [
-                                    "api",
-                                    "auth",
-                                    "signin"
-                                ]
-                            }
-                        },
-                        "response": [],
-                        "uid": "32110446-c109186b-f417-4118-a525-fe36fcfe435e"
-                    }
-                ],
-                "id": "59f68b5a-6758-4813-be39-170360050813",
-                "uid": "32110446-59f68b5a-6758-4813-be39-170360050813"
+          {
+            "name": "Create a Car (Only accessible to the Admin)",
+            "id": "d65aa212-7c8f-4e77-a072-c99f0a3a5f90",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
             },
-            {
-                "name": "Car",
-                "item": [
-                    {
-                        "name": "Create a Car (Only accessible to the Admin)",
-                        "id": "d65aa212-7c8f-4e77-a072-c99f0a3a5f90",
-                        "protocolProfileBehavior": {
-                            "disableBodyPruning": true
-                        },
-                        "request": {
-                            "method": "POST",
-                            "header": [
-                                {
-                                    "key": "Authorization",
-                                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmE0ZTBhMWE3N2UzZmFhNDdmZDUiLCJyb2xlIjoidXNlciIsImlhdCI6MTcxODMyOTg2OSwiZXhwIjoxNzE4MzMzNDY5fQ.B3AsFB2NAuRniV48hB8MEl7pUHbBOJdwhto1hRLFJzY",
-                                    "type": "text"
-                                }
-                            ],
-                            "body": {
-                                "mode": "raw",
-                                "raw": "{\r\n  \"name\": \"Chevrolet Bolt EV\",\r\n  \"description\": \"A versatile electric car with impressive range and efficiency.\",\r\n  \"color\": \"black\",\r\n  \"isElectric\": true,\r\n  \"features\": [\"AC\", \"Bluetooth\", \"Keyless Entry\"],\r\n  \"pricePerHour\": 480\r\n}\r\n",
-                                "options": {
-                                    "raw": {
-                                        "language": "json"
-                                    }
-                                }
-                            },
-                            "url": {
-                                "raw": "{{deployment_url}}/api/cars",
-                                "host": [
-                                    "{{deployment_url}}"
-                                ],
-                                "path": [
-                                    "api",
-                                    "cars"
-                                ]
-                            }
-                        },
-                        "response": [],
-                        "uid": "32110446-d65aa212-7c8f-4e77-a072-c99f0a3a5f90"
-                    },
-                    {
-                        "name": "get all cars",
-                        "id": "bf7c5ac7-3090-4bdd-bdde-795a0a3a2fff",
-                        "protocolProfileBehavior": {
-                            "disableBodyPruning": true
-                        },
-                        "request": {
-                            "method": "GET",
-                            "header": [
-                                {
-                                    "key": "Authorization",
-                                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmQxY2NlYjljYjE5NjI1MjIyNTEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTgzODQxOTcsImV4cCI6MTcxODM4Nzc5N30.B1SvnMN0Jp9kEMVmIGcMKrFrfwT9l7zEoqN4sR8rGWk",
-                                    "type": "text"
-                                }
-                            ],
-                            "body": {
-                                "mode": "raw",
-                                "raw": "",
-                                "options": {
-                                    "raw": {
-                                        "language": "json"
-                                    }
-                                }
-                            },
-                            "url": {
-                                "raw": "{{deployment_url}}/api/cars",
-                                "host": [
-                                    "{{deployment_url}}"
-                                ],
-                                "path": [
-                                    "api",
-                                    "cars"
-                                ]
-                            }
-                        },
-                        "response": [],
-                        "uid": "32110446-bf7c5ac7-3090-4bdd-bdde-795a0a3a2fff"
-                    },
-                    {
-                        "name": "Return The Car (Only Accessible To Admin)",
-                        "id": "997d1b8d-aae4-48a9-9a79-3bf54eea1b76",
-                        "protocolProfileBehavior": {
-                            "disableBodyPruning": true
-                        },
-                        "request": {
-                            "method": "PUT",
-                            "header": [
-                                {
-                                    "key": "Authorization",
-                                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmQxY2NlYjljYjE5NjI1MjIyNTEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTgzMjg3NjEsImV4cCI6MTcxODMzMjM2MX0.4KFWIAWVZ-QpCyKu9R8CadwoNl-3r30jfqrNxDNb6Is",
-                                    "type": "text"
-                                }
-                            ],
-                            "body": {
-                                "mode": "raw",
-                                "raw": "{\r\n   \"bookingId\": \"666baa25abb3679458e93ff1\",\r\n   \"endTime\": \"17:00\"\r\n}",
-                                "options": {
-                                    "raw": {
-                                        "language": "json"
-                                    }
-                                }
-                            },
-                            "url": {
-                                "raw": "{{deployment_url}}/api/cars/return",
-                                "host": [
-                                    "{{deployment_url}}"
-                                ],
-                                "path": [
-                                    "api",
-                                    "cars",
-                                    "return"
-                                ]
-                            }
-                        },
-                        "response": [],
-                        "uid": "32110446-997d1b8d-aae4-48a9-9a79-3bf54eea1b76"
-                    },
-                    {
-                        "name": "get a single car",
-                        "id": "e6992cc9-6e85-4b28-b5e5-36af1b529ec4",
-                        "protocolProfileBehavior": {
-                            "disableBodyPruning": true
-                        },
-                        "request": {
-                            "method": "GET",
-                            "header": [
-                                {
-                                    "key": "Authorization",
-                                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmE0ZTBhMWE3N2UzZmFhNDdmZDUiLCJyb2xlIjoidXNlciIsImlhdCI6MTcxODMzMDcwMSwiZXhwIjoxNzE4MzM0MzAxfQ.k2xn5LM901Na63Qf3K8XachEW-FfaCYVhAtZaQOAWGs",
-                                    "type": "text"
-                                }
-                            ],
-                            "body": {
-                                "mode": "raw",
-                                "raw": "",
-                                "options": {
-                                    "raw": {
-                                        "language": "json"
-                                    }
-                                }
-                            },
-                            "url": {
-                                "raw": "{{deployment_url}}/api/cars/666b3e7b8d8989c93424db2a",
-                                "host": [
-                                    "{{deployment_url}}"
-                                ],
-                                "path": [
-                                    "api",
-                                    "cars",
-                                    "666b3e7b8d8989c93424db2a"
-                                ]
-                            }
-                        },
-                        "response": [],
-                        "uid": "32110446-e6992cc9-6e85-4b28-b5e5-36af1b529ec4"
-                    },
-                    {
-                        "name": "Update A Car (Only Accessible to the Admin)",
-                        "id": "a9a0d14a-71b6-4f05-8888-e9f78472820e",
-                        "protocolProfileBehavior": {
-                            "disableBodyPruning": true
-                        },
-                        "request": {
-                            "method": "PUT",
-                            "header": [
-                                {
-                                    "key": "Authorization",
-                                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmE0ZTBhMWE3N2UzZmFhNDdmZDUiLCJyb2xlIjoidXNlciIsImlhdCI6MTcxODMzMDcwMSwiZXhwIjoxNzE4MzM0MzAxfQ.k2xn5LM901Na63Qf3K8XachEW-FfaCYVhAtZaQOAWGs",
-                                    "type": "text"
-                                }
-                            ],
-                            "body": {
-                                "mode": "raw",
-                                "raw": "{\r\n    \"features\":[\"mm\",\"fddsfds\"],\r\n    \"isElectric\":false\r\n}",
-                                "options": {
-                                    "raw": {
-                                        "language": "json"
-                                    }
-                                }
-                            },
-                            "url": {
-                                "raw": "{{deployment_url}}/api/cars/666b3ee08d8989c93424db2d",
-                                "host": [
-                                    "{{deployment_url}}"
-                                ],
-                                "path": [
-                                    "api",
-                                    "cars",
-                                    "666b3ee08d8989c93424db2d"
-                                ]
-                            }
-                        },
-                        "response": [],
-                        "uid": "32110446-a9a0d14a-71b6-4f05-8888-e9f78472820e"
-                    },
-                    {
-                        "name": "Delete A Car (Only Accessible to the Admin)",
-                        "id": "cf17078d-a15f-4799-b2e6-502fe03b3d9e",
-                        "protocolProfileBehavior": {
-                            "disableBodyPruning": true
-                        },
-                        "request": {
-                            "method": "DELETE",
-                            "header": [
-                                {
-                                    "key": "Authorization",
-                                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmQxY2NlYjljYjE5NjI1MjIyNTEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTgzMzI4MzcsImV4cCI6MTcxODMzNjQzN30.YUxjnqY5Q67ICUkDwyv6LKdxlwyxbWoytA9rQ3isaGw",
-                                    "type": "text"
-                                }
-                            ],
-                            "body": {
-                                "mode": "raw",
-                                "raw": "",
-                                "options": {
-                                    "raw": {
-                                        "language": "json"
-                                    }
-                                }
-                            },
-                            "url": {
-                                "raw": "{{deployment_url}}/api/cars/666b3e7b8d8989c93424db2a",
-                                "host": [
-                                    "{{deployment_url}}"
-                                ],
-                                "path": [
-                                    "api",
-                                    "cars",
-                                    "666b3e7b8d8989c93424db2a"
-                                ]
-                            }
-                        },
-                        "response": [],
-                        "uid": "32110446-cf17078d-a15f-4799-b2e6-502fe03b3d9e"
-                    }
-                ],
-                "id": "9c0fdd33-41fd-4165-b63c-64901538d4fd",
-                "uid": "32110446-9c0fdd33-41fd-4165-b63c-64901538d4fd"
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmQxY2NlYjljYjE5NjI1MjIyNTEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjQ2MDc0MDIsImV4cCI6MTcyNDYxMTAwMn0.zd6xr9Vtt3OnupO3AAqF09XcstRWWfNS6gS3L5uKWpw",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": " {\r\n    \"name\": \"Jaguar IR-PACE\",\r\n    \"description\": \"A luxury electric SUV with dynamic performance and elegant design.\",\r\n    \"color\": \"Green\",\r\n    \"isElectric\": true,\r\n    \"basicFeatures\": [\"All-Wheel Drive\", \"Meridian Sound System\", \"Adaptive Air Suspension\"],\r\n    \"additionalFeatures\": [\r\n      { \"name\": \"Luxury Package\", \"feePerHour\": 12 },\r\n      { \"name\": \"Enhanced Navigation\", \"feePerHour\": 5 }\r\n    ],\r\n    \"pricePerHour\": 38,\r\n    \"isDeleted\": false,\r\n    \"status\": \"available\",\r\n    \"isCurrentlyHired\": false,\r\n    \"locationWhereAvailable\": [\"Atlanta\", \"Charlotte\"]\r\n  }",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/cars",
+                "host": ["{{local_url}}"],
+                "path": ["api", "cars"]
+              }
             },
-            {
-                "name": "Bookings",
-                "item": [
-                    {
-                        "name": "Book a Car (Only Accessible to the User)",
-                        "id": "f31c2217-18b8-4d3d-8c4c-9af3113be1c2",
-                        "protocolProfileBehavior": {
-                            "disableBodyPruning": true
-                        },
-                        "request": {
-                            "method": "POST",
-                            "header": [
-                                {
-                                    "key": "Authorization",
-                                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmE0ZTBhMWE3N2UzZmFhNDdmZDUiLCJyb2xlIjoidXNlciIsImlhdCI6MTcxODM4NDQ3MywiZXhwIjoxNzE4Mzg4MDczfQ.g59oTu63QZ1TeTkbPA0Ds_EVvVn5VmlALgyOLFu4rz8",
-                                    "type": "text"
-                                }
-                            ],
-                            "body": {
-                                "mode": "raw",
-                                "raw": "{\r\n   \"carId\": \"666b3eeb8d8989c93424db30\",\r\n   \"date\": \"2024-06-15\",\r\n   \"startTime\": \"13:00\"\r\n}",
-                                "options": {
-                                    "raw": {
-                                        "language": "json"
-                                    }
-                                }
-                            },
-                            "url": {
-                                "raw": "{{deployment_url}}/api/bookings",
-                                "host": [
-                                    "{{deployment_url}}"
-                                ],
-                                "path": [
-                                    "api",
-                                    "bookings"
-                                ]
-                            }
-                        },
-                        "response": [],
-                        "uid": "32110446-f31c2217-18b8-4d3d-8c4c-9af3113be1c2"
-                    },
-                    {
-                        "name": "Get User's Bookings (Only Accessible To the User)",
-                        "id": "b70a2499-a078-4067-a581-3d0714fd9a22",
-                        "protocolProfileBehavior": {
-                            "disableBodyPruning": true
-                        },
-                        "request": {
-                            "method": "GET",
-                            "header": [
-                                {
-                                    "key": "Authorization",
-                                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmE0ZTBhMWE3N2UzZmFhNDdmZDUiLCJyb2xlIjoidXNlciIsImlhdCI6MTcxODMzMDcwMSwiZXhwIjoxNzE4MzM0MzAxfQ.k2xn5LM901Na63Qf3K8XachEW-FfaCYVhAtZaQOAWGs",
-                                    "type": "text"
-                                }
-                            ],
-                            "body": {
-                                "mode": "raw",
-                                "raw": "",
-                                "options": {
-                                    "raw": {
-                                        "language": "json"
-                                    }
-                                }
-                            },
-                            "url": {
-                                "raw": "{{deployment_url}}/api/bookings/my-bookings",
-                                "host": [
-                                    "{{deployment_url}}"
-                                ],
-                                "path": [
-                                    "api",
-                                    "bookings",
-                                    "my-bookings"
-                                ]
-                            }
-                        },
-                        "response": [],
-                        "uid": "32110446-b70a2499-a078-4067-a581-3d0714fd9a22"
-                    },
-                    {
-                        "name": "Get All Bookings (Accessible to the Admin)",
-                        "id": "9f8e513d-3478-4100-8f35-9bd355c471f2",
-                        "protocolProfileBehavior": {
-                            "disableBodyPruning": true
-                        },
-                        "request": {
-                            "method": "GET",
-                            "header": [
-                                {
-                                    "key": "Authorization",
-                                    "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmQxY2NlYjljYjE5NjI1MjIyNTEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTgzODQxOTcsImV4cCI6MTcxODM4Nzc5N30.B1SvnMN0Jp9kEMVmIGcMKrFrfwT9l7zEoqN4sR8rGWk",
-                                    "type": "text"
-                                }
-                            ],
-                            "body": {
-                                "mode": "raw",
-                                "raw": "",
-                                "options": {
-                                    "raw": {
-                                        "language": "json"
-                                    }
-                                }
-                            },
-                            "url": {
-                                "raw": "{{deployment_url}}/api/bookings/?carId=666b3e7b8d8989c93424db2a&date=2024-06-15",
-                                "host": [
-                                    "{{deployment_url}}"
-                                ],
-                                "path": [
-                                    "api",
-                                    "bookings",
-                                    ""
-                                ],
-                                "query": [
-                                    {
-                                        "key": "carId",
-                                        "value": "666b3e7b8d8989c93424db2a"
-                                    },
-                                    {
-                                        "key": "date",
-                                        "value": "2024-06-15"
-                                    }
-                                ]
-                            }
-                        },
-                        "response": [],
-                        "uid": "32110446-9f8e513d-3478-4100-8f35-9bd355c471f2"
-                    }
-                ],
-                "id": "9132ae78-9156-442e-86a0-7983fed319d5",
-                "uid": "32110446-9132ae78-9156-442e-86a0-7983fed319d5"
-            }
-        ]
-    }
+            "response": [],
+            "uid": "32110446-d65aa212-7c8f-4e77-a072-c99f0a3a5f90"
+          },
+          {
+            "name": "get all cars",
+            "id": "bf7c5ac7-3090-4bdd-bdde-795a0a3a2fff",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmQ3NTdlMTcxYTA5YmI4YWFiZDViNTUiLCJyb2xlIjoiYWRtaW4iLCJuYW1lIjoiU29sZGF5bWFVc2VyIiwiaWF0IjoxNzI1NDgzNjE2LCJleHAiOjE3MjU0ODcyMTZ9.IGhiCEAuCnUWMSudQpY7Ueoc8FCFwsTxQeej-g7QeME",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/cars",
+                "host": ["{{local_url}}"],
+                "path": ["api", "cars"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-bf7c5ac7-3090-4bdd-bdde-795a0a3a2fff"
+          },
+          {
+            "name": "Return The Car (Only Accessible To Admin)",
+            "id": "997d1b8d-aae4-48a9-9a79-3bf54eea1b76",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmNiOWM5MDhkMDFmMjQwMWFiODdiNTkiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjQ2MjYxMDgsImV4cCI6MTcyNDYyOTcwOH0.R6oBQMr5Y4BmJpFGhxVXUFfjTz8NgcJRZI7RDebg-j8",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n   \"bookingId\": \"66cbaaf259444c85e8e5f185\",\r\n   \"endTime\": \"17:00\",\r\n   \"returningDate\":\"2024-06-16\"\r\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/cars/return",
+                "host": ["{{local_url}}"],
+                "path": ["api", "cars", "return"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-997d1b8d-aae4-48a9-9a79-3bf54eea1b76"
+          },
+          {
+            "name": "get a single car",
+            "id": "e6992cc9-6e85-4b28-b5e5-36af1b529ec4",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZjOTJmYWZiMmM0ZTkyMDJmOTk4MjEiLCJyb2xlIjoidXNlciIsImlhdCI6MTcxODM5MTU2MSwiZXhwIjoxNzE4Mzk1MTYxfQ.9ow645NYZFwFkX2hS-9ptiq6mamqwWyBXtN9hu00niQ",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/cars/666b3e7b8d8989c93424db2a",
+                "host": ["{{local_url}}"],
+                "path": ["api", "cars", "666b3e7b8d8989c93424db2a"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-e6992cc9-6e85-4b28-b5e5-36af1b529ec4"
+          },
+          {
+            "name": "Update A Car (Only Accessible to the Admin)",
+            "id": "a9a0d14a-71b6-4f05-8888-e9f78472820e",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmQxY2NlYjljYjE5NjI1MjIyNTEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjQ2MTMzMTEsImV4cCI6MTcyNDYxNjkxMX0.xcckbTyKdlxwLfSlgo6g4hX2JeWjZdgkh40jQCZzQ7k",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"basicFeatures\":[\"mm\",\"fddsfds\"],\r\n    \"isElectric\":false\r\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/cars/66cb5d3857149852d43d9d5e",
+                "host": ["{{local_url}}"],
+                "path": ["api", "cars", "66cb5d3857149852d43d9d5e"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-a9a0d14a-71b6-4f05-8888-e9f78472820e"
+          },
+          {
+            "name": "Delete A Car (Only Accessible to the Admin)",
+            "id": "cf17078d-a15f-4799-b2e6-502fe03b3d9e",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "DELETE",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmQxY2NlYjljYjE5NjI1MjIyNTEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTgzMzI4MzcsImV4cCI6MTcxODMzNjQzN30.YUxjnqY5Q67ICUkDwyv6LKdxlwyxbWoytA9rQ3isaGw",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/cars/666b3e7b8d8989c93424db2a",
+                "host": ["{{local_url}}"],
+                "path": ["api", "cars", "666b3e7b8d8989c93424db2a"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-cf17078d-a15f-4799-b2e6-502fe03b3d9e"
+          }
+        ],
+        "id": "9c0fdd33-41fd-4165-b63c-64901538d4fd",
+        "uid": "32110446-9c0fdd33-41fd-4165-b63c-64901538d4fd"
+      },
+      {
+        "name": "Bookings",
+        "item": [
+          {
+            "name": "Book a Car (Only Accessible to the User)",
+            "id": "f31c2217-18b8-4d3d-8c4c-9af3113be1c2",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmQ3NTdlMTcxYTA5YmI4YWFiZDViNTUiLCJyb2xlIjoidXNlciIsIm5hbWUiOiJTb2xkYXltYVVzZXIiLCJpYXQiOjE3MjU0MDEwNjMsImV4cCI6MTcyNTQwNDY2M30.-mhP5oKIenZYtypSoI4GMoxb52Hx0ZQFBptzYF1Xorc",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n   \"carId\": \"66d75de5481c6743a3e1fd39\",\r\n   \"hiringDate\": \"2024-06-15\",\r\n   \"startTime\": \"13:00\",\r\n   \"startLocation\":\"Dhaka\",\r\n   \"additionalFeatures\":[\"Companion\"]\r\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/bookings",
+                "host": ["{{local_url}}"],
+                "path": ["api", "bookings"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-f31c2217-18b8-4d3d-8c4c-9af3113be1c2"
+          },
+          {
+            "name": "Change Booking Status(Only Admin)",
+            "id": "31d93de0-35cd-426a-94ca-0a3d4d8e3a75",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmNiOWM5MDhkMDFmMjQwMWFiODdiNTkiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjQ2MzA3NjUsImV4cCI6MTcyNDYzNDM2NX0.YfeODho9MXDMVWW4nW1VL8FlxiygAFBFBolo2wMZR4k",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n   \"bookingId\": \"66cbc7625d276dafd6e1eeed\",\r\n   \"status\":\"pending\"\r\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/bookings/change-booking-status",
+                "host": ["{{local_url}}"],
+                "path": ["api", "bookings", "change-booking-status"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-31d93de0-35cd-426a-94ca-0a3d4d8e3a75"
+          },
+          {
+            "name": "Update a booking(Both role have different access)",
+            "id": "243ef724-35b6-4592-8f32-d1b0719c9ac4",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmNiOWM5MDhkMDFmMjQwMWFiODdiNTkiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjQ3MDU0MjAsImV4cCI6MTcyNDcwOTAyMH0.-caobD2nguXV4GxZWK1v5qTkFZ7unhMle-T3gUfwSUI",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n\"hiringDate\": \"2024-06-15\",\r\n\"startTime\": \"13:00\",\r\n\"startLocation\": \"San Francisco\",\r\n\"status\": \"approved\",\r\n\"additionalFeatures\": [\r\n            \"Premium Sound System\"\r\n        ]\r\n\r\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/bookings/update-booking/66ccebc01284ac85d497b442",
+                "host": ["{{local_url}}"],
+                "path": [
+                  "api",
+                  "bookings",
+                  "update-booking",
+                  "66ccebc01284ac85d497b442"
+                ]
+              }
+            },
+            "response": [],
+            "uid": "32110446-243ef724-35b6-4592-8f32-d1b0719c9ac4"
+          },
+          {
+            "name": "Get User's Bookings (Only Accessible To the User)",
+            "id": "b70a2499-a078-4067-a581-3d0714fd9a22",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmNiOWM3OThkMDFmMjQwMWFiODdiNTYiLCJyb2xlIjoidXNlciIsIm5hbWUiOiJTb2xkYXltYVVzZXIiLCJpYXQiOjE3MjUyMDQ3MDYsImV4cCI6MTcyNTIwODMwNn0.YE2j7X_eE_PEmg15EJ0_xo8NWsFyrlWgXNIGUWW3NH8",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/bookings/my-bookings",
+                "host": ["{{local_url}}"],
+                "path": ["api", "bookings", "my-bookings"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-b70a2499-a078-4067-a581-3d0714fd9a22"
+          },
+          {
+            "name": "Get All Bookings of a car to a specefic date (Accessible to the Admin)",
+            "id": "9f8e513d-3478-4100-8f35-9bd355c471f2",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmQxY2NlYjljYjE5NjI1MjIyNTEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTgzODQxOTcsImV4cCI6MTcxODM4Nzc5N30.B1SvnMN0Jp9kEMVmIGcMKrFrfwT9l7zEoqN4sR8rGWk",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}/api/bookings/?carId=666b3e7b8d8989c93424db2a&date=2024-06-15",
+                "host": ["{{local_url}"],
+                "path": ["api", "bookings", ""],
+                "query": [
+                  {
+                    "key": "carId",
+                    "value": "666b3e7b8d8989c93424db2a"
+                  },
+                  {
+                    "key": "date",
+                    "value": "2024-06-15"
+                  }
+                ]
+              }
+            },
+            "response": [],
+            "uid": "32110446-9f8e513d-3478-4100-8f35-9bd355c471f2"
+          },
+          {
+            "name": "Get All Bookings (admin)",
+            "id": "8d1f345e-109a-416b-bac9-351c7e6845d5",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "GET",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmQxY2NlYjljYjE5NjI1MjIyNTEiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MTgzODQxOTcsImV4cCI6MTcxODM4Nzc5N30.B1SvnMN0Jp9kEMVmIGcMKrFrfwT9l7zEoqN4sR8rGWk",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}/api/bookings/?carId=666b3e7b8d8989c93424db2a&date=2024-06-15",
+                "host": ["{{local_url}"],
+                "path": ["api", "bookings", ""],
+                "query": [
+                  {
+                    "key": "carId",
+                    "value": "666b3e7b8d8989c93424db2a"
+                  },
+                  {
+                    "key": "date",
+                    "value": "2024-06-15"
+                  }
+                ]
+              }
+            },
+            "response": [],
+            "uid": "32110446-8d1f345e-109a-416b-bac9-351c7e6845d5"
+          }
+        ],
+        "id": "9132ae78-9156-442e-86a0-7983fed319d5",
+        "uid": "32110446-9132ae78-9156-442e-86a0-7983fed319d5"
+      },
+      {
+        "name": "Auth",
+        "item": [
+          {
+            "name": "Sign Up",
+            "id": "ee191632-0f0e-425e-a8bb-e96a3080d931",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n  \"name\": \"sanzu\",\r\n  \"email\": \"sanzu@example.com\",\r\n  \"role\": \"user\", \r\n  \"password\": \"password123\",\r\n  \"phone\": \"1234567890\",\r\n  \"address\": \"123 Main St, City, Country\"\r\n \r\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/auth/signup",
+                "host": ["{{local_url}}"],
+                "path": ["api", "auth", "signup"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-ee191632-0f0e-425e-a8bb-e96a3080d931"
+          },
+          {
+            "name": "getAllUsers(admin)",
+            "id": "86c810e7-f8d3-46f4-8c03-fa589b12be61",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n  \"name\": \"SoldaymaAdmin\",\r\n  \"email\": \"soldaymdanad@example.com\",\r\n  \"role\": \"admin\", \r\n  \"password\": \"password123\",\r\n  \"phone\": \"1234567890\",\r\n  \"address\": \"123 Main St, City, Country\"\r\n \r\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/auth/signup",
+                "host": ["{{local_url}}"],
+                "path": ["api", "auth", "signup"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-86c810e7-f8d3-46f4-8c03-fa589b12be61"
+          },
+          {
+            "name": "Sign In",
+            "id": "fe5a159a-4d22-41ab-914e-3e2685be8f8b",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n  \"email\": \"solddaymdanad@example.com\",\r\n  \"password\": \"password123\"\r\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{deployment_url}}/api/auth/signin",
+                "host": ["{{deployment_url}}"],
+                "path": ["api", "auth", "signin"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-fe5a159a-4d22-41ab-914e-3e2685be8f8b"
+          },
+          {
+            "name": "UpdateUser",
+            "id": "e0c7d87e-13fa-4645-84e9-08ed7f5cfcb4",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmE0ZTBhMWE3N2UzZmFhNDdmZDUiLCJyb2xlIjoidXNlciIsImlhdCI6MTcyNDYxNjEwNCwiZXhwIjoxNzI0NjE5NzA0fQ.xdsRx3h6O_Xil1OSDqGU0lvZuU1H2uS0RXR3gmLrT88",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n  \"address\": \"Changing\",\r\n  \"preferences\":[\"Changed\"]\r\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/auth/update-user",
+                "host": ["{{local_url}}"],
+                "path": ["api", "auth", "update-user"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-e0c7d87e-13fa-4645-84e9-08ed7f5cfcb4"
+          },
+          {
+            "name": "UpdateUser By Admin",
+            "id": "3eca48c3-d5e9-47ca-a307-c2da7e2973f6",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "PUT",
+              "header": [
+                {
+                  "key": "Authorization",
+                  "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjZiMmE0ZTBhMWE3N2UzZmFhNDdmZDUiLCJyb2xlIjoidXNlciIsImlhdCI6MTcyNDYxNjEwNCwiZXhwIjoxNzI0NjE5NzA0fQ.xdsRx3h6O_Xil1OSDqGU0lvZuU1H2uS0RXR3gmLrT88",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n  \"role\":\"admin\"\r\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/auth/update-user-by-admin/324324ksfakf",
+                "host": ["{{local_url}}"],
+                "path": ["api", "auth", "update-user-by-admin", "324324ksfakf"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-3eca48c3-d5e9-47ca-a307-c2da7e2973f6"
+          },
+          {
+            "name": "Sign In By Admin",
+            "id": "6952f107-4fc2-49a1-8e84-6971714bbecb",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n  \"email\": \"soldaymdanad@example.com\",\r\n  \"password\": \"password123\"\r\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/auth/signin",
+                "host": ["{{local_url}}"],
+                "path": ["api", "auth", "signin"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-6952f107-4fc2-49a1-8e84-6971714bbecb"
+          },
+          {
+            "name": "GenerateAccessTokenFromRefreshToken",
+            "id": "61904fb8-cacf-447c-9650-5609f2e0dd35",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/auth/refresh-token",
+                "host": ["{{local_url}}"],
+                "path": ["api", "auth", "refresh-token"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-61904fb8-cacf-447c-9650-5609f2e0dd35"
+          },
+          {
+            "name": "signout",
+            "id": "4f08d038-bd97-4824-87de-3d9e1232c38c",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n  \"email\": \"solayman@example.com\",\r\n  \"password\": \"password123\"\r\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/auth/signout",
+                "host": ["{{local_url}}"],
+                "path": ["api", "auth", "signout"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-4f08d038-bd97-4824-87de-3d9e1232c38c"
+          },
+          {
+            "name": "DeleteAUser(Admin)",
+            "id": "d7bb08c3-8bb1-4766-a9dd-0203ca119577",
+            "protocolProfileBehavior": {
+              "disableBodyPruning": true
+            },
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n\"userId\":\"\"\r\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{local_url}}/api/auth/delete-a-user",
+                "host": ["{{local_url}}"],
+                "path": ["api", "auth", "delete-a-user"]
+              }
+            },
+            "response": [],
+            "uid": "32110446-d7bb08c3-8bb1-4766-a9dd-0203ca119577"
+          }
+        ],
+        "id": "e410de09-a076-4abd-bd37-7c415e7cb434",
+        "uid": "32110446-e410de09-a076-4abd-bd37-7c415e7cb434"
+      }
+    ]
+  }
 }
