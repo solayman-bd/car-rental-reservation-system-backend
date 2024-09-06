@@ -11,14 +11,16 @@ const app: Application = express();
 app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser());
 
+const DEV_ORIGIN = 'http://localhost:5173';
+const PROD_ORIGIN = 'https://car-rental-reservation-system-frontend.vercel.app';
+// Determine allowed origin based on environment
+const allowedOrigin =
+  process.env.NODE_ENV === 'development' ? DEV_ORIGIN : PROD_ORIGIN;
 app.use(
   cors({
-    origin: (origin, callback) => {
-      callback(null, true); // Accepts requests from all origins
-    },
+    origin: allowedOrigin, // Set based on environment
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true, // Allows credentials (cookies, authorization headers)
-    allowedHeaders: ['Content-Type', 'Authorization'], // Customize headers as needed
+    credentials: true, // If using cookies or authentication
   }),
 );
 

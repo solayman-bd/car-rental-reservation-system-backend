@@ -15,7 +15,7 @@ const signInUser = catchAsync(async (req, res) => {
     sameSite: 'none',
     maxAge: 1000 * 60 * 60 * 24 * 365,
   });
-  sendResponse(res, {
+  return sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'User is logged in succesfully!',

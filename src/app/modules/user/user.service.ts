@@ -47,7 +47,7 @@ const signInUser = async (
 
     // Check if user exists
     if (!user) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'Invalid email or password');
+      throw new AppError(httpStatus.BAD_REQUEST, 'Invalid email or password');
     }
 
     // Check if password is correct

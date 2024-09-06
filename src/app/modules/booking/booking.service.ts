@@ -151,7 +151,6 @@ const myBookings = async (
     }
 
     // Create the booking document
-    // Create the booking document
     const myBookings = await BookingModel.find({
       user: userId,
       status: { $in: ['pending', 'approved', 'returned'] }, // Corrected filter for multiple statuses
@@ -276,6 +275,12 @@ const updateBooking = async (
 
     // Handle cancellation status
     if (payload?.status === BOOKING_STATUS.cancelled) {
+      const car = await CarModel.findById(booking.carId);
+      if (car) {
+        car.status = 'available';
+        car.isCurrentlyHired = false;
+        await car.save();
+      }
       // Find the user associated with the booking
       const bookingUser = await UserModel.findById(updatedBooking.user);
       if (bookingUser) {
